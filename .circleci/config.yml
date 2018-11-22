@@ -1,0 +1,51 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:10
+  working_directory: ~/elections-frontend
+
+jobs:
+  install-dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/elections-frontend
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}
+            - dependencies-
+      - run: |
+          yarn install --frozen-lockfile
+      - save_cache:
+          key: dependencies-{{ checksum "package.json" }}
+          paths: node_modules
+      - persist_to_workspace:
+          root: .
+          paths: .
+  lint-and-flow:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/elections-frontend
+      - run: |
+          yarn lint
+          yarn flow
+  build-package:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/elections-frontend
+      - run: yarn build
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - install-dependencies
+      - lint-and-flow:
+          requires:
+            - install-dependencies
+      - build-package:
+          requires:
+            - install-dependencies
