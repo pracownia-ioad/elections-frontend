@@ -5,7 +5,7 @@ type Props = {};
 
 class App extends Component<Props> {
   render() {
-    return <div className="App">Elections-frontend</div>;
+    return <div className="App">Elections-frontend!</div>;
   }
 }
 
