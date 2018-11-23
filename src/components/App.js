@@ -1,0 +1,34 @@
+/* @flow */
+import * as React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import red from '@material-ui/core/colors/red';
+
+import Landing from './Landing';
+
+type Props = {};
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: red[400],
+    },
+  },
+  typography: { useNextVariants: true },
+});
+
+class App extends React.Component<Props> {
+  render() {
+    return (
+      <div className="App">
+        <MuiThemeProvider theme={theme}>
+          <CssBaseline />
+          <Landing />
+        </MuiThemeProvider>
+      </div>
+    );
+  }
+}
+
+export default App;
