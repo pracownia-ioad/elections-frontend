@@ -3,6 +3,8 @@ import * as React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
+import JssProvider from 'react-jss/lib/JssProvider';
+import { createGenerateClassName } from '@material-ui/core/styles';
 
 import Landing from './Landing';
 
@@ -18,14 +20,21 @@ const theme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
+const generateClassName = createGenerateClassName({
+  dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'c',
+});
+
 class App extends React.Component<Props> {
   render() {
     return (
       <div className="App">
-        <MuiThemeProvider theme={theme}>
-          <CssBaseline />
-          <Landing />
-        </MuiThemeProvider>
+        <JssProvider generateClassName={generateClassName}>
+          <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <Landing />
+          </MuiThemeProvider>
+        </JssProvider>
       </div>
     );
   }
