@@ -8,6 +8,7 @@ import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { navigate } from '@reach/router';
 
 const useStyles: () => {|
   container: any,
@@ -23,10 +24,8 @@ const useStyles: () => {|
     alignItems: 'center',
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#232323',
   },
   wrapper: {
-    backgroundColor: '#212121',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -75,6 +74,9 @@ export default function Landing() {
 
   function onSubmitClick() {
     setVisible(!visible);
+    setTimeout(() => {
+      navigate('/dashboard/user');
+    }, 1500);
   }
 
   return (
