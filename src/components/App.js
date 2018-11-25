@@ -11,12 +11,13 @@ import red from '@material-ui/core/colors/red';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { Router } from '@reach/router';
 
+import VotingContainer from './VotingContainer';
+import ExploreMessage from './ExploreMessage';
 // $FlowFixMe;
 const Login = React.lazy(() => import('./Login'));
 // $FlowFixMe;
 const UserDashboard = React.lazy(() => import('./UserDashboard'));
 // $FlowFixMe
-const Voting = React.lazy(() => import('./VotingContainer'));
 
 type Props = {};
 
@@ -47,7 +48,9 @@ class App extends React.Component<Props> {
                 <Router>
                   <Login path="/" />
                   <UserDashboard path="/dashboard/user/">
-                    <Voting path="voting/:votingId" />
+                    <ExploreMessage path="/" />
+                    {/* $FlowFixMe */}
+                    <VotingContainer path="voting/:votingId" />
                   </UserDashboard>
                 </Router>
               </Suspense>
