@@ -1,5 +1,4 @@
 /* @flow */
-// $FlowFixMe
 import React, { Suspense, Fragment } from 'react';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
