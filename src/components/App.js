@@ -1,5 +1,4 @@
 /* @flow */
-// $FlowFixMe
 import React, { Suspense, ConcurrentMode } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
@@ -9,17 +8,22 @@ import {
 } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { Router } from '@reach/router';
+import { Router, navigate } from '@reach/router';
 
+import AuthenticationContext, {
+  type AuthenticationType,
+} from '../context/authentication';
 import VotingContainer from './VotingContainer';
 import ExploreMessage from './ExploreMessage';
-// $FlowFixMe;
+
 const Login = React.lazy(() => import('./Login'));
-// $FlowFixMe;
 const UserDashboard = React.lazy(() => import('./UserDashboard'));
-// $FlowFixMe
 
 type Props = {};
+
+type State = {
+  user: AuthenticationType,
+};
 
 const theme = createMuiTheme({
   palette: {
@@ -36,24 +40,36 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'c',
 });
 
-class App extends React.Component<Props> {
+class App extends React.Component<Props, State> {
+  state = {
+    user: null,
+  };
+
+  setAuthData = (authData: AuthenticationType) => {
+    this.setState({ user: authData }, () => {
+      navigate('/dashboard/user');
+    });
+  };
+
   render() {
     return (
       <div className="App">
         <ConcurrentMode>
           <JssProvider generateClassName={generateClassName}>
             <MuiThemeProvider theme={theme}>
-              <CssBaseline />
-              <Suspense fallback={<div>Loading...</div>}>
-                <Router>
-                  <Login path="/" />
-                  <UserDashboard path="/dashboard/user/">
-                    <ExploreMessage path="/" />
-                    {/* $FlowFixMe */}
-                    <VotingContainer path="voting/:votingId" />
-                  </UserDashboard>
-                </Router>
-              </Suspense>
+              <AuthenticationContext.Provider value={this.state.user}>
+                <CssBaseline />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Router>
+                    <Login path="/" setAuthData={this.setAuthData} />
+                    <UserDashboard path="/dashboard/user/">
+                      <ExploreMessage path="/" />
+                      {/* $FlowFixMe */}
+                      <VotingContainer path="voting/:votingId" />
+                    </UserDashboard>
+                  </Router>
+                </Suspense>
+              </AuthenticationContext.Provider>
             </MuiThemeProvider>
           </JssProvider>
         </ConcurrentMode>

@@ -1,5 +1,4 @@
 /* @flow */
-// $FlowFixMe
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +7,80 @@ import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { navigate } from '@reach/router';
+
+import type { AuthenticationType } from '../context/authentication';
+
+type Props = {
+  setAuthData: AuthenticationType => mixed,
+};
+
+export default function Login(props: Props) {
+  const classes = useStyles();
+  const [index, setIndex] = useState('');
+  const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+
+  function onIndexChange(e) {
+    setIndex(e.target.value);
+  }
+
+  function onPasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
+  function onSubmitClick() {
+    setVisible(!visible);
+    setTimeout(() => {
+      props.setAuthData({
+        id: '1',
+        firstName: 'Dawid',
+        lastName: 'Urbaniak',
+        index: '204023',
+      });
+    }, 1500);
+  }
+
+  return (
+    <div className={classes.container}>
+      <div className={classes.wrapper}>
+        <Typography className={classes.mainText} variant="h1">
+          Go Vote
+        </Typography>
+        <div className={classes.spinnerWrapper}>
+          {visible ? <CircularProgress size={25} /> : null}
+        </div>
+        <TextField
+          required
+          id="index-number"
+          type="text"
+          value={index}
+          variant="outlined"
+          onChange={onIndexChange}
+          label="Numer Indeksu"
+          className={classes.input}
+        />
+        <TextField
+          required
+          id="password"
+          type="password"
+          value={password}
+          variant="outlined"
+          onChange={onPasswordChange}
+          label="Hasło"
+          className={classes.input}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.submitButton}
+          onClick={onSubmitClick}
+        >
+          Zaloguj
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 const useStyles: () => {|
   container: any,
@@ -57,66 +129,3 @@ const useStyles: () => {|
     justifyContent: 'center',
   },
 });
-
-export default function Landing() {
-  const classes = useStyles();
-  const [index, setIndex] = useState('');
-  const [password, setPassword] = useState('');
-  const [visible, setVisible] = useState(false);
-
-  function onIndexChange(e) {
-    setIndex(e.target.value);
-  }
-
-  function onPasswordChange(e) {
-    setPassword(e.target.value);
-  }
-
-  function onSubmitClick() {
-    setVisible(!visible);
-    setTimeout(() => {
-      navigate('/dashboard/user');
-    }, 1500);
-  }
-
-  return (
-    <div className={classes.container}>
-      <div className={classes.wrapper}>
-        <Typography className={classes.mainText} variant="h1">
-          Go Vote
-        </Typography>
-        <div className={classes.spinnerWrapper}>
-          {visible ? <CircularProgress size={25} /> : null}
-        </div>
-        <TextField
-          required
-          id="index-number"
-          type="text"
-          value={index}
-          variant="outlined"
-          onChange={onIndexChange}
-          label="Numer Indeksu"
-          className={classes.input}
-        />
-        <TextField
-          required
-          id="password"
-          type="password"
-          value={password}
-          variant="outlined"
-          onChange={onPasswordChange}
-          label="Hasło"
-          className={classes.input}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.submitButton}
-          onClick={onSubmitClick}
-        >
-          Zaloguj
-        </Button>
-      </div>
-    </div>
-  );
-}

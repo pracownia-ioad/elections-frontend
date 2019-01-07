@@ -1,5 +1,4 @@
 /* @flow */
-// $FlowFixMe
 import React, { useState } from 'react';
 import { unstable_createResource } from 'react-cache'; // eslint-disable-line
 import Typography from '@material-ui/core/Typography';
