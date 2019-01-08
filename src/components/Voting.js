@@ -17,29 +17,6 @@ type Props = {
   votingId: number,
 };
 
-const useStyles = makeStyles({
-  container: {
-    margin: 50,
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-  },
-  titleWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: 40,
-  },
-  list: {
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-});
-
 const VotingResource = unstable_createResource(votingId => getVoting(votingId));
 
 function voting({ votingId }: Props) {
@@ -83,5 +60,28 @@ function voting({ votingId }: Props) {
     </div>
   );
 }
+
+const useStyles = makeStyles({
+  container: {
+    margin: 50,
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  titleWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  list: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 export default voting;

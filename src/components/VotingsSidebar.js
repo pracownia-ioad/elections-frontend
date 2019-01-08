@@ -14,17 +14,6 @@ import { navigate } from '@reach/router';
 
 import { getVotings } from '../services';
 
-const useStyles = makeStyles({
-  list: {
-    marginTop: 10,
-  },
-  placeholder: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 50,
-  },
-});
-
 const APIResource = unstable_createResource(() => getVotings());
 
 function sortVotings(first, second) {
@@ -86,5 +75,16 @@ function Sidebar() {
     </Suspense>
   );
 }
+
+const useStyles = makeStyles({
+  list: {
+    marginTop: 10,
+  },
+  placeholder: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 50,
+  },
+});
 
 export default Sidebar;
