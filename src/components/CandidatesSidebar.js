@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Suspense, Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,12 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/styles';
-import { unstable_createResource } from 'react-cache'; // eslint-disable-line
 
-import { getCandidates } from '../services';
 import { type Candidate } from '../types';
-
-const APIResource = unstable_createResource(() => getCandidates());
 
 function sortCandidates(first, second) {
   return `${first.lastName}${first.firstName}` >
@@ -23,12 +19,11 @@ function sortCandidates(first, second) {
 
 type SidebarItemsProps = {
   search: string,
+  candidates: Array<Candidate>,
 };
 
-function SidebarItems({ search }: SidebarItemsProps) {
-  const data = APIResource.read();
-
-  return [...data]
+function SidebarItems({ search, candidates }: SidebarItemsProps) {
+  return [...candidates]
     .filter(
       ({ firstName, lastName }) =>
         firstName.toLowerCase().startsWith(search) ||
@@ -40,14 +35,16 @@ function SidebarItems({ search }: SidebarItemsProps) {
         <ListItem button key={id}>
           <ListItemText primary={`${lastName} ${firstName}`} />
         </ListItem>
-        {/* <li>
-          <Divider />
-        </li> */}
       </Fragment>
     ));
 }
 
-function Sidebar() {
+type Props = {
+  loading: boolean,
+  candidates: Array<Candidate>,
+};
+
+function Sidebar({ candidates, loading }: Props) {
   const classes = useStyles();
   const [search, setSearch] = useState('');
 
@@ -55,33 +52,32 @@ function Sidebar() {
     setSearch(event.target.value);
   }
 
+  if (loading) {
+    return (
+      <div className={classes.placeholder}>
+        <CircularProgress size={25} />
+      </div>
+    );
+  }
+
   return (
-    <Suspense
-      maxDuration={300}
-      fallback={
-        <div className={classes.placeholder}>
-          <CircularProgress size={25} />
-        </div>
+    <List
+      className={classes.list}
+      component="nav"
+      subheader={
+        <ListSubheader component="div">Lista Kandydatów</ListSubheader>
       }
     >
-      <List
-        className={classes.list}
-        component="nav"
-        subheader={
-          <ListSubheader component="div">Lista Kandydatów</ListSubheader>
-        }
-      >
-        <ListItem>
-          <TextField
-            label="Szukaj"
-            variant="outlined"
-            value={search}
-            onChange={setSearchText}
-          />
-        </ListItem>
-        <SidebarItems search={search.toLowerCase()} />
-      </List>
-    </Suspense>
+      <ListItem>
+        <TextField
+          label="Szukaj"
+          variant="outlined"
+          value={search}
+          onChange={setSearchText}
+        />
+      </ListItem>
+      <SidebarItems candidates={candidates} search={search.toLowerCase()} />
+    </List>
   );
 }
 
