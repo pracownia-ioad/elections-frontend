@@ -31,8 +31,8 @@ function Appbar(props: Props) {
               }`}
             </Typography>
             <Button
-              variant="contained"
-              color="inherit"
+              variant="raised"
+              color="secondary"
               onClick={props.logout}
               className={classes.logoutButton}
             >
@@ -51,6 +51,15 @@ const useStyles = makeStyles({
   toolbar: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rightContent: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    marginLeft: '15px',
+    marginRight: '15px',
   },
   rightContent: {
     display: 'flex',

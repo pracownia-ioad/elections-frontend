@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import CandidatesSidebar from './CandidatesSidebar';
 import Appbar from './Appbar';
 
+import { getCandidates } from '../services';
 import adminChecker from '../hoc/adminChecker';
 
 type Props = {
@@ -15,12 +16,26 @@ type Props = {
 function UserDashboard(props: Props) {
   const classes = useStyles();
 
+  const [loading, setLoading] = React.useState(true);
+  const [candidates, setCandidates] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchCandidates();
+  }, []);
+
+  async function fetchCandidates() {
+    setLoading(true);
+    const data = await getCandidates();
+    setLoading(false);
+    setCandidates(data || []);
+  }
+
   return (
     <div>
       <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
-          <CandidatesSidebar />
+          <CandidatesSidebar candidates={candidates} loading={loading} />
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>

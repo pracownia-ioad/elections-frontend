@@ -1,6 +1,6 @@
 /* @flow */
-import { votings, fullVotings, candidates } from '../mocks';
-
+import { votings, fullVotings } from '../mocks';
+import { API_URL } from '../constants';
 import { type Voting, type FullVoting, type Candidate } from '../types';
 
 export function getVotings(): Promise<Array<Voting>> {
@@ -22,8 +22,18 @@ export function getVoting(votingId: number): Promise<FullVoting> {
   });
 }
 
-export function getCandidates(): Promise<Array<Candidate>> {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(candidates), 1000);
-  });
+export async function getCandidates(): Promise<Array<Candidate> | null> {
+  try {
+    const res = await fetch(`${API_URL}/candidates`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return null;
+  }
 }

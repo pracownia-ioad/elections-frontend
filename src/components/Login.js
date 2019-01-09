@@ -49,7 +49,7 @@ export default function Login(props: Props) {
         firstName: 'Dawid',
         lastName: 'Urbaniak',
         index: '204023',
-        isAdmin: false,
+        isAdmin: true,
       })
     );
 
@@ -59,7 +59,7 @@ export default function Login(props: Props) {
         firstName: 'Dawid',
         lastName: 'Urbaniak',
         index: '204023',
-        isAdmin: false,
+        isAdmin: true,
       });
     }, 1500);
   }

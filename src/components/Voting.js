@@ -40,7 +40,7 @@ function voting({ votingId }: Props) {
         component="ul"
         subheader={<ListSubheader component="div">Kandydaci</ListSubheader>}
       >
-        {data.candidats.map(({ firstName, lastName, id }) => (
+        {data.candidates.map(({ firstName, lastName, id }) => (
           <ListItem
             key={id}
             dense
