@@ -11,6 +11,7 @@ import type { AuthenticationType } from '../context/authentication';
 
 type Props = {
   user: AuthenticationType,
+  logout: () => mixed,
 };
 
 function Appbar(props: Props) {
@@ -23,11 +24,21 @@ function Appbar(props: Props) {
           System głosowania
         </Typography>
         {props.user ? (
-          <Typography variant="subtitle1" color="inherit">
-            {`${props.user.firstName} ${props.user.lastName} ${
-              props.user.index
-            }`}
-          </Typography>
+          <div className={classes.rightContent}>
+            <Typography variant="subtitle1" color="inherit">
+              {`${props.user.firstName} ${props.user.lastName} ${
+                props.user.index
+              }`}
+            </Typography>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={props.logout}
+              className={classes.logoutButton}
+            >
+              Wyloguj
+            </Button>
+          </div>
         ) : (
           <Button color="inherit">Zaloguj</Button>
         )}
@@ -40,6 +51,13 @@ const useStyles = makeStyles({
   toolbar: {
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  rightContent: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    marginLeft: '10px',
   },
 });
 

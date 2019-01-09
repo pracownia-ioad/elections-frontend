@@ -4,6 +4,19 @@ import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import CatImg from '../assets/sad-cat.png';
 
+function exploreMessage() {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.container}>
+      <img className={classes.img} src={CatImg} alt="sad-cat" />
+      <Typography variant="title" className={classes.message}>
+        Hmm... Wybierz głosowanie w którym chcesz wziąć udział!
+      </Typography>
+    </div>
+  );
+}
+
 const useStyles = makeStyles({
   container: {
     margin: 50,
@@ -24,18 +37,5 @@ const useStyles = makeStyles({
     marginBottom: 20,
   },
 });
-
-function exploreMessage() {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.container}>
-      <img className={classes.img} src={CatImg} alt="sad-cat" />
-      <Typography variant="title" className={classes.message}>
-        Hmm... Wybierz głosowanie w którym chcesz wziąć udział!
-      </Typography>
-    </div>
-  );
-}
 
 export default exploreMessage;

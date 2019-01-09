@@ -6,6 +6,7 @@ export type AuthenticationType = {
   firstName: string,
   lastName: string,
   index: string,
+  isAdmin: boolean,
 } | null;
 
 const AuthenticationContext = React.createContext<AuthenticationType>(null);

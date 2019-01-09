@@ -19,7 +19,7 @@ export const votings = [
   },
 ];
 
-export const candidats = [
+export const candidates = [
   { id: 0, firstName: 'Szymon', lastName: 'Tosik' },
   { id: 1, firstName: 'Dawid', lastName: 'Urbaniak' },
   { id: 2, firstName: 'Szymon', lastName: 'Marciniak' },
@@ -32,7 +32,7 @@ export const fullVotings = [
     description: 'Głosowanie na przewodniczącego rady samorządu studenckiego.',
     startDate: new Date(2018, 10, 24),
     endDate: new Date(2018, 10, 28),
-    candidats,
+    candidates,
   },
   {
     id: 1,
@@ -40,7 +40,7 @@ export const fullVotings = [
     description: 'Głosowanie na zastępce przewodniczącego koła doktoranckiego.',
     startDate: new Date(2018, 10, 24),
     endDate: new Date(2018, 11, 30),
-    candidats,
+    candidates,
   },
   {
     id: 2,
@@ -48,6 +48,6 @@ export const fullVotings = [
     description: 'Głosowanie na najgorszego wykładowcę.',
     startDate: new Date(2018, 10, 12),
     endDate: new Date(2018, 10, 24),
-    candidats,
+    candidates,
   },
 ];

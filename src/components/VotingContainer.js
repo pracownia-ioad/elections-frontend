@@ -10,27 +10,6 @@ type Props = {
   votingId: number,
 };
 
-const useStyles = makeStyles({
-  root: {
-    margin: 50,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    display: 'flex',
-    flex: 1,
-    minHeight: '500px',
-    transition: 'transform 0.5s',
-  },
-  spinner: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
 function votingContainer({ votingId }: Props) {
   const classes = useStyles();
 
@@ -51,5 +30,26 @@ function votingContainer({ votingId }: Props) {
     </div>
   );
 }
+
+const useStyles = makeStyles({
+  root: {
+    margin: 50,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    display: 'flex',
+    flex: 1,
+    minHeight: '500px',
+    transition: 'transform 0.5s',
+  },
+  spinner: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default votingContainer;
