@@ -1,4 +1,12 @@
+/* @flow */
 import { combineReducers } from 'redux';
-import candidatesReducer from './candidates';
+import candidates from './candidates';
 
-export default combineReducers({ candidatesReducer });
+const reducers = {
+  candidates,
+};
+
+export type Reducers = typeof reducers;
+
+// $FlowFixMe Dunno how to fix this...
+export default combineReducers(reducers);

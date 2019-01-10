@@ -1,30 +1,38 @@
 /* @flow */
+import { type Dispatch } from './types/store';
 
 import {
-  ADD_CANDIDATE,
   START_CANDIDATES_FETCHING,
-  STOP_CANDIDATES_FETCHING,
+  SUCCESS_CANDIDATES_FETCHING,
+  FAILURE_CANDIDATES_FETCHING,
+  START_CREATING_CANDIDATE,
+  SUCCESS_CREATING_CANDIDATE,
+  FAILURE_CREATING_CANDIDATE,
 } from './actionTypes';
 
-import { getCandidates } from '../services';
-import { type Candidate } from '../types';
+import { getCandidates, createCandidate } from '../services';
+import { type LocalCandidate } from '../types';
 
 export function fetchCandidates() {
-  return async dispatch => {
+  return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_CANDIDATES_FETCHING });
       const data = await getCandidates();
-      dispatch({ type: STOP_CANDIDATES_FETCHING, payload: data });
+      dispatch({ type: SUCCESS_CANDIDATES_FETCHING, payload: data });
     } catch (err) {
-      dispatch({ type: STOP_CANDIDATES_FETCHING, payload: [] });
+      dispatch({ type: FAILURE_CANDIDATES_FETCHING });
     }
   };
 }
 
-export function addCandidate(candidate: Candidate) {
-  console.log('!@# addCandidate');
-  return {
-    type: ADD_CANDIDATE,
-    payload: candidate,
+export function addCandidate(candidate: LocalCandidate) {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: START_CREATING_CANDIDATE });
+      const candidateData = await createCandidate(candidate);
+      dispatch({ type: SUCCESS_CREATING_CANDIDATE, payload: candidateData });
+    } catch (err) {
+      dispatch({ type: FAILURE_CREATING_CANDIDATE });
+    }
   };
 }

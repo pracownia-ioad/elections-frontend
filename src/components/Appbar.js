@@ -61,13 +61,6 @@ const useStyles = makeStyles({
     marginLeft: '15px',
     marginRight: '15px',
   },
-  rightContent: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  logoutButton: {
-    marginLeft: '10px',
-  },
 });
 
 export default withAuthentication(Appbar);

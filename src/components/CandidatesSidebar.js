@@ -1,5 +1,6 @@
 /* @flow */
 import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,6 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/styles';
 
 import { type Candidate } from '../types';
+import { type State } from '../redux/types/state';
 
 function sortCandidates(first, second) {
   return `${first.lastName}${first.firstName}` >
@@ -39,12 +41,7 @@ function SidebarItems({ search, candidates }: SidebarItemsProps) {
     ));
 }
 
-type Props = {
-  loading: boolean,
-  candidates: Array<Candidate>,
-};
-
-function Sidebar({ candidates, loading }: Props) {
+function Sidebar({ candidates, isFetching }) {
   const classes = useStyles();
   const [search, setSearch] = useState('');
 
@@ -52,7 +49,7 @@ function Sidebar({ candidates, loading }: Props) {
     setSearch(event.target.value);
   }
 
-  if (loading) {
+  if (isFetching) {
     return (
       <div className={classes.placeholder}>
         <CircularProgress size={25} />
@@ -92,4 +89,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default Sidebar;
+const mapStateToProps = ({ candidates }: State) => ({
+  candidates: Object.values(candidates.candidates),
+  isFetching: candidates.fetchingCandidates,
+});
+
+export default connect(mapStateToProps)(Sidebar);

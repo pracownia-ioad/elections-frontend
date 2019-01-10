@@ -1,49 +1,32 @@
 /* @flow */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import { addCandidate as addCandidateAction } from '../redux/actions';
-import { type Candidate } from '../types';
+import { addCandidate, fetchCandidates } from '../redux/actions';
 
-type Props = {
-  addCandidate: Candidate => mixed,
-};
-
-function adminPanel({ addCandidate }: Props) {
+function adminPanel(props) {
   const classes = useStyles();
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    props.fetchCandidates();
+  }, []);
 
   function onNameChange(e) {
     setName(e.target.value);
   }
 
   async function createCandidate() {
-    try {
-      const response = await fetch(
-        'https://elections-backend.herokuapp.com/candidates',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName: name.split(' ')[0],
-            lastName: name.split(' ')[1],
-            position: 'Dunno',
-          }),
-        }
-      );
-
-      const res = await response.json();
-      addCandidate(res);
-    } catch (err) {
-      console.warn('Error while creating candidate', err);
-    }
+    props.addCandidate({
+      firstName: name.split(' ')[0],
+      lastName: name.split(' ')[1],
+    });
   }
 
   return (
@@ -96,10 +79,16 @@ const useStyles = makeStyles({
   },
 });
 
+const mapDispatchToProps = (dispatch: *) =>
+  bindActionCreators(
+    {
+      addCandidate,
+      fetchCandidates,
+    },
+    dispatch
+  );
+
 export default connect(
   null,
-  dispatch => ({
-    addCandidate: (candidate: Candidate) =>
-      dispatch(addCandidateAction(candidate)),
-  })
+  mapDispatchToProps
 )(adminPanel);
