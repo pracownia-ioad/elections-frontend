@@ -1,4 +1,11 @@
+/* @flow */
 import { combineReducers } from 'redux';
-import candidatesReducer from './candidates';
+import candidates from './candidates';
 
-export default combineReducers({ candidatesReducer });
+const reducers = {
+  candidates,
+};
+
+export type Reducers = typeof reducers;
+
+export default combineReducers(reducers);

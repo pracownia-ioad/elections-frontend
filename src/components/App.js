@@ -20,7 +20,7 @@ import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
 // import CreateVoting from './CreateVoting';
 
-import store from '../redux/store';
+import configureStore from '../redux/store';
 
 import { AUTH_DATA_KEY } from '../constants';
 
@@ -51,6 +51,8 @@ const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'c',
 });
+
+const store = configureStore();
 
 class App extends React.Component<Props, State> {
   state = {
