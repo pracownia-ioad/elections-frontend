@@ -26,7 +26,10 @@ const initialState = {
   creatingCandidate: false,
 };
 
-export default function(state: CandidatesState = initialState, action: Action) {
+export default function(
+  state: CandidatesState = initialState,
+  action: Action
+): CandidatesState {
   switch (action.type) {
     case START_CREATING_CANDIDATE: {
       return {

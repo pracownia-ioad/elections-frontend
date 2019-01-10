@@ -20,7 +20,7 @@ export function fetchCandidates() {
       const data = await getCandidates();
       dispatch({ type: SUCCESS_CANDIDATES_FETCHING, payload: data });
     } catch (err) {
-      dispatch({ type: FAILURE_CANDIDATES_FETCHING, payload: 'string' });
+      dispatch({ type: FAILURE_CANDIDATES_FETCHING });
     }
   };
 }

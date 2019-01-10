@@ -8,4 +8,5 @@ const reducers = {
 
 export type Reducers = typeof reducers;
 
+// $FlowFixMe Dunno how to fix this...
 export default combineReducers(reducers);
