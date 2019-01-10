@@ -1,5 +1,5 @@
 /* @flow */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -7,11 +7,14 @@ import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { navigate } from '@reach/router';
 
-import type { AuthenticationType } from '../context/authentication';
+import { AUTH_DATA_KEY } from '../constants';
+import { type AuthenticationType } from '../context/authentication';
 
 type Props = {
   setAuthData: AuthenticationType => mixed,
+  user?: AuthenticationType, // eslint-disable-line
 };
 
 export default function Login(props: Props) {
@@ -19,6 +22,14 @@ export default function Login(props: Props) {
   const [index, setIndex] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const { user } = props;
+    if (user) {
+      const path = user.isAdmin ? 'admin' : 'user';
+      navigate(`/dashboard/${path}`);
+    }
+  }, []);
 
   function onIndexChange(e) {
     setIndex(e.target.value);
@@ -30,12 +41,25 @@ export default function Login(props: Props) {
 
   function onSubmitClick() {
     setVisible(!visible);
+
+    window.localStorage.setItem(
+      AUTH_DATA_KEY,
+      JSON.stringify({
+        id: '1',
+        firstName: 'Dawid',
+        lastName: 'Urbaniak',
+        index: '204023',
+        isAdmin: true,
+      })
+    );
+
     setTimeout(() => {
       props.setAuthData({
         id: '1',
         firstName: 'Dawid',
         lastName: 'Urbaniak',
         index: '204023',
+        isAdmin: true,
       });
     }, 1500);
   }

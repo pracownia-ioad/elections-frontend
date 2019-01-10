@@ -1,7 +1,12 @@
 /* @flow */
 import { votings, fullVotings } from '../mocks';
-
-import { type Voting, type FullVoting } from '../types';
+import { API_URL } from '../constants';
+import {
+  type Voting,
+  type FullVoting,
+  type Candidate,
+  type LocalCandidate,
+} from '../types';
 
 export function getVotings(): Promise<Array<Voting>> {
   return new Promise(resolve => {
@@ -12,10 +17,7 @@ export function getVotings(): Promise<Array<Voting>> {
 export function getVoting(votingId: number): Promise<FullVoting> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const voting = fullVotings.find(({ id }) => {
-        console.log(id, votingId);
-        return id === votingId;
-      });
+      const voting = fullVotings.find(({ id }) => id === votingId);
       if (voting) {
         resolve(voting);
       } else {
@@ -23,4 +25,35 @@ export function getVoting(votingId: number): Promise<FullVoting> {
       }
     }, 1500);
   });
+}
+
+export async function getCandidates(): Promise<Array<Candidate>> {
+  const res = await fetch(`${API_URL}/candidates`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  return data;
+}
+
+export async function createCandidate(
+  candidate: LocalCandidate
+): Promise<Candidate> {
+  const { firstName, lastName } = candidate;
+  const response = await fetch(`${API_URL}/candidates`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      firstName,
+      lastName,
+      position: 'Dunno',
+    }),
+  });
+
+  return response.json();
 }

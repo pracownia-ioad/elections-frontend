@@ -2,10 +2,11 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import VotingsSidebar from './VotingsSidebar';
+import CandidatesSidebar from './CandidatesSidebar';
 import Appbar from './Appbar';
 
-import authChecker from '../hoc/authChecker';
+import { getCandidates } from '../services';
+import adminChecker from '../hoc/adminChecker';
 
 type Props = {
   children: React.Node,
@@ -15,12 +16,26 @@ type Props = {
 function UserDashboard(props: Props) {
   const classes = useStyles();
 
+  const [loading, setLoading] = React.useState(true);
+  const [candidates, setCandidates] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchCandidates();
+  }, []);
+
+  async function fetchCandidates() {
+    setLoading(true);
+    const data = await getCandidates();
+    setLoading(false);
+    setCandidates(data || []);
+  }
+
   return (
     <div>
       <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
-          <VotingsSidebar />
+          <CandidatesSidebar candidates={candidates} loading={loading} />
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>
@@ -49,4 +64,4 @@ const useStyles: () => {
   },
 });
 
-export default authChecker(UserDashboard);
+export default adminChecker(UserDashboard);
