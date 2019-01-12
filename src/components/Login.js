@@ -106,14 +106,7 @@ export default function Login(props: Props) {
   );
 }
 
-const useStyles: () => {|
-  container: any,
-  mainText: any,
-  input: any,
-  submitButton: any,
-  spinnerWrapper: any,
-  wrapper: any,
-|} = makeStyles({
+const useStyles = makeStyles({
   container: {
     display: 'flex',
     justifyContent: 'center',

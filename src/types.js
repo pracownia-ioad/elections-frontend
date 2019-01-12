@@ -17,6 +17,12 @@ export type Election = {|
   candidates: Array<Candidate>,
 |};
 
+export type ServerElection = {|
+  ...Election,
+  startDate: string,
+  endDate: string,
+|};
+
 export type LocalElection = $Diff<
   Election,
   {|
