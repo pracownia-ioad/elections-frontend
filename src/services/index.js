@@ -9,7 +9,7 @@ import {
   type ServerElection,
 } from '../types';
 
-export function getVoting(votingId: number): Promise<FullVoting> {
+export function getVoting(votingId: number): Promise<*> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const voting = fullVotings.find(({ id }) => id === votingId);
