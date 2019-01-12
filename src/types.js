@@ -4,22 +4,28 @@ export type Candidate = {|
   id: number,
   firstName: string,
   lastName: string,
+  position: string,
 |};
 
-export type LocalCandidate = $Diff<Candidate, { id: number }>;
+export type LocalCandidate = $Diff<Candidate, {| id: number |}>;
 
-export type Voting = {|
+export type Election = {|
   id: number,
   name: string,
   startDate: Date,
   endDate: Date,
+  candidates: Array<Candidate>,
 |};
 
-export type FullVoting = {|
-  id: number,
-  name: string,
-  description: string,
-  startDate: Date,
-  endDate: Date,
-  candidats: Array<Candidate>,
+export type ServerElection = {|
+  ...Election,
+  startDate: string,
+  endDate: string,
 |};
+
+export type LocalElection = $Diff<
+  Election,
+  {|
+    id: number,
+  |}
+>;

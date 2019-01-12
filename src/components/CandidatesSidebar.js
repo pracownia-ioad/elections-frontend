@@ -28,8 +28,8 @@ function SidebarItems({ search, candidates }: SidebarItemsProps) {
   return [...candidates]
     .filter(
       ({ firstName, lastName }) =>
-        firstName.toLowerCase().startsWith(search) ||
-        lastName.toLowerCase().startsWith(search)
+        firstName.toLowerCase().includes(search) ||
+        lastName.toLowerCase().includes(search)
     )
     .sort(sortCandidates)
     .map(({ id, firstName, lastName }: Candidate) => (
@@ -49,14 +49,6 @@ function Sidebar({ candidates, isFetching }) {
     setSearch(event.target.value);
   }
 
-  if (isFetching) {
-    return (
-      <div className={classes.placeholder}>
-        <CircularProgress size={25} />
-      </div>
-    );
-  }
-
   return (
     <List
       className={classes.list}
@@ -73,7 +65,13 @@ function Sidebar({ candidates, isFetching }) {
           onChange={setSearchText}
         />
       </ListItem>
-      <SidebarItems candidates={candidates} search={search.toLowerCase()} />
+      {isFetching ? (
+        <div className={classes.placeholder}>
+          <CircularProgress size={25} />
+        </div>
+      ) : (
+        <SidebarItems candidates={candidates} search={search.toLowerCase()} />
+      )}
     </List>
   );
 }

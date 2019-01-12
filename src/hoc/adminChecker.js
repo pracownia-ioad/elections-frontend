@@ -16,7 +16,6 @@ export default function adminChecker<Config: {}>(
       if (!authData) {
         navigate('/');
       } else if (!authData.isAdmin) {
-        console.log('!@#', authData.isAdmin);
         navigate('/dashboard/user');
       }
     });
