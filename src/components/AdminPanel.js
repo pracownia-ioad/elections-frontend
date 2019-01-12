@@ -6,27 +6,31 @@ import { bindActionCreators } from 'redux';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 
+import CreateCandidateModal from './CreateCandidateModal';
 import { addCandidate, fetchCandidates } from '../redux/actions';
+
+import { type LocalCandidate } from '../types';
 
 function adminPanel(props) {
   const classes = useStyles();
-  const [name, setName] = useState('');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     props.fetchCandidates();
   }, []);
 
-  function onNameChange(e) {
-    setName(e.target.value);
+  async function createCandidate(candidate: LocalCandidate) {
+    await props.addCandidate(candidate);
+    hide();
   }
 
-  async function createCandidate() {
-    props.addCandidate({
-      firstName: name.split(' ')[0],
-      lastName: name.split(' ')[1],
-    });
+  function hide() {
+    setVisible(false);
+  }
+
+  function show() {
+    setVisible(true);
   }
 
   return (
@@ -35,18 +39,11 @@ function adminPanel(props) {
         Panel Admina
       </Typography>
       <div className={classes.wrapper}>
-        <TextField
-          className={classes.input}
-          label="Imię Nazwisko"
-          variant="standard"
-          value={name}
-          onChange={onNameChange}
-        />
         <Button
           className={classes.createCandidateButton}
           variant="outlined"
           color="primary"
-          onClick={createCandidate}
+          onClick={show}
         >
           Stwórz kandydata
         </Button>
@@ -54,6 +51,11 @@ function adminPanel(props) {
           Stwórz wybory
         </Button>
       </div>
+      <CreateCandidateModal
+        visible={visible}
+        onClose={hide}
+        createCandidate={createCandidate}
+      />
     </div>
   );
 }
