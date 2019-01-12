@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import VotingsSidebar from './VotingsSidebar';
+import ElectionsSidebar from './ElectionsSidebar';
 import Appbar from './Appbar';
 
 import authChecker from '../hoc/authChecker';
@@ -20,7 +20,7 @@ function UserDashboard(props: Props) {
       <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
-          <VotingsSidebar />
+          <ElectionsSidebar />
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>
@@ -28,12 +28,7 @@ function UserDashboard(props: Props) {
   );
 }
 
-const useStyles: () => {
-  sidebar: any,
-  dashboardWrapper: any,
-  container: any,
-  nested: any,
-} = makeStyles({
+const useStyles = makeStyles({
   dashboardWrapper: {
     display: 'flex',
     width: '100vw',

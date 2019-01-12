@@ -43,12 +43,7 @@ function UserDashboard(props: Props) {
   );
 }
 
-const useStyles: () => {
-  sidebar: any,
-  dashboardWrapper: any,
-  container: any,
-  nested: any,
-} = makeStyles({
+const useStyles = makeStyles({
   dashboardWrapper: {
     display: 'flex',
     width: '100vw',

@@ -1,18 +1,13 @@
 /* @flow */
-import { votings, fullVotings } from '../mocks';
+import { fullVotings } from '../mocks';
 import { API_URL } from '../constants';
 import {
-  type Voting,
-  type FullVoting,
+  type Election,
   type Candidate,
   type LocalCandidate,
+  type LocalElection,
+  type ServerElection,
 } from '../types';
-
-export function getVotings(): Promise<Array<Voting>> {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(votings), 2000);
-  });
-}
 
 export function getVoting(votingId: number): Promise<FullVoting> {
   return new Promise((resolve, reject) => {
@@ -42,17 +37,41 @@ export async function getCandidates(): Promise<Array<Candidate>> {
 export async function createCandidate(
   candidate: LocalCandidate
 ): Promise<Candidate> {
-  const { firstName, lastName } = candidate;
   const response = await fetch(`${API_URL}/candidates`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(candidate),
+  });
+
+  return response.json();
+}
+
+export async function createElection(
+  election: LocalElection
+): Promise<Election> {
+  const response = await fetch(`${API_URL}/elections`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
-      firstName,
-      lastName,
-      position: 'Dunno',
+      ...election,
+      startDate: election.startDate.toISOString(),
+      endDate: election.endDate.toISOString(),
     }),
+  });
+
+  return response.json();
+}
+
+export async function getElections(): Promise<Array<ServerElection>> {
+  const response = await fetch(`${API_URL}/elections`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
   return response.json();

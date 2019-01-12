@@ -8,13 +8,20 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import CreateCandidateModal from './CreateCandidateModal';
-import { addCandidate, fetchCandidates } from '../redux/actions';
+import CreateElectionModal from './CreateElectionModal';
+import {
+  addCandidate,
+  fetchCandidates,
+  createElection as createElectionAction,
+} from '../redux/actions';
 
-import { type LocalCandidate } from '../types';
+import { type LocalCandidate, type LocalElection } from '../types';
+import { type State } from '../redux/types/state';
 
 function adminPanel(props) {
   const classes = useStyles();
-  const [visible, setVisible] = useState(false);
+  const [candidateModalVisible, setCandidateModalVisible] = useState(false);
+  const [electionModalVisible, setElectionModalVisible] = useState(false);
 
   useEffect(() => {
     props.fetchCandidates();
@@ -22,15 +29,28 @@ function adminPanel(props) {
 
   async function createCandidate(candidate: LocalCandidate) {
     await props.addCandidate(candidate);
-    hide();
+    hideCandidateModal();
   }
 
-  function hide() {
-    setVisible(false);
+  async function createElection(election: LocalElection) {
+    await props.createElectionAction(election);
+    hideElectionModal();
   }
 
-  function show() {
-    setVisible(true);
+  function hideCandidateModal() {
+    setCandidateModalVisible(false);
+  }
+
+  function showCandidateModal() {
+    setCandidateModalVisible(true);
+  }
+
+  function hideElectionModal() {
+    setElectionModalVisible(false);
+  }
+
+  function showElectionModal() {
+    setElectionModalVisible(true);
   }
 
   return (
@@ -43,18 +63,24 @@ function adminPanel(props) {
           className={classes.createCandidateButton}
           variant="outlined"
           color="primary"
-          onClick={show}
+          onClick={showCandidateModal}
         >
           Stwórz kandydata
         </Button>
-        <Button variant="contained" color="primary" onClick={() => {}}>
+        <Button variant="contained" color="primary" onClick={showElectionModal}>
           Stwórz wybory
         </Button>
       </div>
       <CreateCandidateModal
-        visible={visible}
-        onClose={hide}
+        visible={candidateModalVisible}
+        onClose={hideCandidateModal}
         createCandidate={createCandidate}
+      />
+      <CreateElectionModal
+        visible={electionModalVisible}
+        onClose={hideElectionModal}
+        createElection={createElection}
+        candidates={props.candidates}
       />
     </div>
   );
@@ -81,16 +107,21 @@ const useStyles = makeStyles({
   },
 });
 
+const mapStateToProps = ({ candidates }: State) => ({
+  candidates: Object.values(candidates.candidates),
+});
+
 const mapDispatchToProps = (dispatch: *) =>
   bindActionCreators(
     {
       addCandidate,
       fetchCandidates,
+      createElectionAction,
     },
     dispatch
   );
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(adminPanel);
