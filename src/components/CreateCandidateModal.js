@@ -29,8 +29,11 @@ function createCandidateModal(props: Props) {
     setPosition(e.target.value);
   }
 
-  function createCandidate() {
-    props.createCandidate({ firstName, lastName, position });
+  async function createCandidate() {
+    await props.createCandidate({ firstName, lastName, position });
+    setFirstName('');
+    setLastName('');
+    setPosition('');
   }
 
   return (

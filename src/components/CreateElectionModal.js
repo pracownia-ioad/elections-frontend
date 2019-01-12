@@ -32,18 +32,22 @@ function createCandidateModal(props: Props) {
     setName(e.target.value);
   }
 
-  function createElection() {
+  async function createElection() {
     // TODO: add client side validation
     if (!startDate || !endDate) {
       return;
     }
 
-    props.createElection({
+    await props.createElection({
       candidates,
       name,
       startDate,
       endDate,
     });
+    setName('');
+    setStartDate(null);
+    setEndDate(null);
+    setCandidates([]);
   }
 
   function onCandidateChange(e) {
@@ -70,6 +74,8 @@ function createCandidateModal(props: Props) {
           value={startDate}
           format="dddd, MMMM Do YYYY"
           onChange={setStartDate}
+          disablePast
+          maxDate={endDate || undefined}
         />
         <DatePicker
           emptyLabel="Data zakończenia"
@@ -77,6 +83,8 @@ function createCandidateModal(props: Props) {
           value={endDate}
           format="dddd, MMMM Do YYYY"
           onChange={setEndDate}
+          disablePast
+          minDate={startDate || undefined}
         />
         <FormControl className={classes.input}>
           <InputLabel htmlFor="select-multiple-chip">Kandydaci</InputLabel>

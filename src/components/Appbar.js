@@ -1,17 +1,19 @@
 /* @flow */
 import React from 'react';
+import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
+import { navigate } from '@reach/router';
 
-import withAuthentication from '../hoc/withAuthentication';
-import type { AuthenticationType } from '../context/authentication';
+import { type User } from '../types';
+import { type State } from '../redux/types/state';
 
 type Props = {
-  user: AuthenticationType,
   logout: () => mixed,
+  user: ?User,
 };
 
 function Appbar(props: Props) {
@@ -26,9 +28,7 @@ function Appbar(props: Props) {
         {props.user ? (
           <div className={classes.rightContent}>
             <Typography variant="subtitle1" color="inherit">
-              {`${props.user.firstName} ${props.user.lastName} ${
-                props.user.index
-              }`}
+              {props.user.index}
             </Typography>
             <Button
               variant="contained"
@@ -40,7 +40,9 @@ function Appbar(props: Props) {
             </Button>
           </div>
         ) : (
-          <Button color="inherit">Zaloguj</Button>
+          <Button onClick={() => navigate('/')} color="inherit">
+            Zaloguj
+          </Button>
         )}
       </Toolbar>
     </AppBar>
@@ -63,4 +65,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default withAuthentication(Appbar);
+const mapStateToProps = ({ user }: State) => ({
+  user: user.user,
+});
+
+export default connect(mapStateToProps)(Appbar);
