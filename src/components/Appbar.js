@@ -31,7 +31,7 @@ function Appbar(props: Props) {
               }`}
             </Typography>
             <Button
-              variant="raised"
+              variant="contained"
               color="secondary"
               onClick={props.logout}
               className={classes.logoutButton}

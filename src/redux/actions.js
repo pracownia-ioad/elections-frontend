@@ -11,7 +11,7 @@ import {
 } from './actionTypes';
 
 import { getCandidates, createCandidate } from '../services';
-import { type LocalCandidate } from '../types';
+import { type LocalCandidate, type LocalElection } from '../types';
 
 export function fetchCandidates() {
   return async (dispatch: Dispatch) => {
@@ -33,6 +33,17 @@ export function addCandidate(candidate: LocalCandidate) {
       dispatch({ type: SUCCESS_CREATING_CANDIDATE, payload: candidateData });
     } catch (err) {
       dispatch({ type: FAILURE_CREATING_CANDIDATE });
+    }
+  };
+}
+
+export function createElection(election: LocalElection) {
+  return async (dispatch: Dispatch) => {
+    try {
+      console.log('Creating election');
+      // TODO: implement this.
+    } catch (err) {
+      // TODO: implement this
     }
   };
 }

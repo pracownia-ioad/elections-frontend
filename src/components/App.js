@@ -11,6 +11,10 @@ import blue from '@material-ui/core/colors/blue';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { Router, navigate } from '@reach/router';
 import { Provider } from 'react-redux';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import moment from 'moment';
+import MomentUtils from '@date-io/moment';
+import 'moment/locale/pl';
 
 import AuthenticationContext, {
   type AuthenticationType,
@@ -54,6 +58,8 @@ const generateClassName = createGenerateClassName({
 
 const store = configureStore();
 
+moment.locale('pl');
+
 class App extends React.Component<Props, State> {
   state = {
     user: JSON.parse(window.localStorage.getItem(AUTH_DATA_KEY)),
@@ -83,34 +89,36 @@ class App extends React.Component<Props, State> {
           <Provider store={store}>
             <JssProvider generateClassName={generateClassName}>
               <MuiThemeProvider theme={theme}>
-                <AuthenticationContext.Provider value={user}>
-                  <CssBaseline />
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <Router>
-                      <Login
-                        path="/"
-                        setAuthData={this.setAuthData}
-                        user={user}
-                      />
-                      <UserDashboard
-                        logout={this.logout}
-                        path="/dashboard/user/"
-                      >
-                        <ExploreMessage path="/" />
-                        {/* $FlowFixMe */}
-                        <VotingContainer path="voting/:votingId" />
-                      </UserDashboard>
-                      <AdminDashboard
-                        logout={this.logout}
-                        path="/dashboard/admin"
-                      >
-                        <AdminPanel path="/" />
-                        {/* $FlowFixMe */}
-                        {/* <CreateVoting path="voting/create" /> */}
-                      </AdminDashboard>
-                    </Router>
-                  </Suspense>
-                </AuthenticationContext.Provider>
+                <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
+                  <AuthenticationContext.Provider value={user}>
+                    <CssBaseline />
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <Router>
+                        <Login
+                          path="/"
+                          setAuthData={this.setAuthData}
+                          user={user}
+                        />
+                        <UserDashboard
+                          logout={this.logout}
+                          path="/dashboard/user/"
+                        >
+                          <ExploreMessage path="/" />
+                          {/* $FlowFixMe */}
+                          <VotingContainer path="voting/:votingId" />
+                        </UserDashboard>
+                        <AdminDashboard
+                          logout={this.logout}
+                          path="/dashboard/admin"
+                        >
+                          <AdminPanel path="/" />
+                          {/* $FlowFixMe */}
+                          {/* <CreateVoting path="voting/create" /> */}
+                        </AdminDashboard>
+                      </Router>
+                    </Suspense>
+                  </AuthenticationContext.Provider>
+                </MuiPickersUtilsProvider>
               </MuiThemeProvider>
             </JssProvider>
           </Provider>
