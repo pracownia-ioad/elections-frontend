@@ -5,8 +5,6 @@ import { makeStyles } from '@material-ui/styles';
 import ElectionsSidebar from './ElectionsSidebar';
 import Appbar from './Appbar';
 
-import authChecker from '../hoc/authChecker';
-
 type Props = {
   children: React.Node,
   logout: () => mixed,
@@ -44,4 +42,4 @@ const useStyles = makeStyles({
   },
 });
 
-export default authChecker(UserDashboard);
+export default UserDashboard;

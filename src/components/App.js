@@ -1,5 +1,7 @@
 /* @flow */
-import React, { Suspense, ConcurrentMode } from 'react';
+import React, { Suspense } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
   MuiThemeProvider,
@@ -10,32 +12,32 @@ import red from '@material-ui/core/colors/red';
 import blue from '@material-ui/core/colors/blue';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { Router, navigate } from '@reach/router';
-import { Provider } from 'react-redux';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 import 'moment/locale/pl';
 
-import AuthenticationContext, {
-  type AuthenticationType,
-} from '../context/authentication';
 import VotingContainer from './VotingContainer';
 import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
-// import CreateVoting from './CreateVoting';
+import {
+  retrieveCredentials,
+  removeCredentials,
+  login,
+} from '../redux/actions';
 
-import configureStore from '../redux/store';
-
-import { AUTH_DATA_KEY } from '../constants';
+import { type State } from '../redux/types/state';
+import { type Credentials, type User } from '../types';
 
 const Login = React.lazy(() => import('./Login'));
 const UserDashboard = React.lazy(() => import('./UserDashboard'));
 const AdminDashboard = React.lazy(() => import('./AdminDashboard'));
 
-type Props = {};
-
-type State = {
-  user: AuthenticationType,
+type Props = {
+  retrieveCredentials: () => void,
+  logout: () => void,
+  login: Credentials => Promise<*>,
+  user: ?User,
 };
 
 const theme = createMuiTheme({
@@ -56,76 +58,71 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'c',
 });
 
-const store = configureStore();
-
 moment.locale('pl');
 
-class App extends React.Component<Props, State> {
-  state = {
-    user: JSON.parse(window.localStorage.getItem(AUTH_DATA_KEY)),
-  };
+class App extends React.Component<Props> {
+  componentDidMount() {
+    this.props.retrieveCredentials();
+  }
 
-  setAuthData = (authData: AuthenticationType) => {
-    this.setState({ user: authData }, () => {
-      if (authData) {
-        const path = authData.isAdmin ? 'admin' : 'user';
-        navigate(`/dashboard/${path}`);
-      }
-    });
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.user && !prevProps.user) {
+      const path = this.props.user.isAdmin ? 'admin' : 'user';
+      navigate(`/dashboard/${path}`);
+    } else if (!this.props.user && prevProps.user) {
+      navigate(`/`);
+    }
+  }
+
+  authenticate = (credentials: Credentials) => {
+    this.props.login(credentials);
   };
 
   logout = () => {
-    window.localStorage.removeItem(AUTH_DATA_KEY);
-    this.setState({ user: null });
-    navigate('/');
+    this.props.logout();
   };
 
   render() {
-    const { user } = this.state;
-
     return (
-      <div className="App">
-        <ConcurrentMode>
-          <Provider store={store}>
-            <JssProvider generateClassName={generateClassName}>
-              <MuiThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
-                  <AuthenticationContext.Provider value={user}>
-                    <CssBaseline />
-                    <Suspense fallback={<div>Loading...</div>}>
-                      <Router>
-                        <Login
-                          path="/"
-                          setAuthData={this.setAuthData}
-                          user={user}
-                        />
-                        <UserDashboard
-                          logout={this.logout}
-                          path="/dashboard/user/"
-                        >
-                          <ExploreMessage path="/" />
-                          {/* $FlowFixMe */}
-                          <VotingContainer path="voting/:votingId" />
-                        </UserDashboard>
-                        <AdminDashboard
-                          logout={this.logout}
-                          path="/dashboard/admin"
-                        >
-                          <AdminPanel path="/" />
-                          {/* $FlowFixMe */}
-                          {/* <CreateVoting path="voting/create" /> */}
-                        </AdminDashboard>
-                      </Router>
-                    </Suspense>
-                  </AuthenticationContext.Provider>
-                </MuiPickersUtilsProvider>
-              </MuiThemeProvider>
-            </JssProvider>
-          </Provider>
-        </ConcurrentMode>
-      </div>
+      <JssProvider generateClassName={generateClassName}>
+        <MuiThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
+            <CssBaseline />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Router>
+                <Login path="/" authenticate={this.authenticate} />
+                <UserDashboard logout={this.logout} path="/dashboard/user/">
+                  <ExploreMessage path="/" />
+                  {/* $FlowFixMe */}
+                  <VotingContainer path="voting/:votingId" />
+                </UserDashboard>
+                <AdminDashboard logout={this.logout} path="/dashboard/admin">
+                  <AdminPanel path="/" />
+                </AdminDashboard>
+              </Router>
+            </Suspense>
+          </MuiPickersUtilsProvider>
+        </MuiThemeProvider>
+      </JssProvider>
     );
   }
 }
 
-export default App;
+const mapStateToProps = ({ user }: State) => ({
+  user: user.user,
+});
+
+const mapDispatchToProps = (dispatch: *) =>
+  bindActionCreators(
+    {
+      retrieveCredentials,
+      logout: removeCredentials,
+      login,
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
