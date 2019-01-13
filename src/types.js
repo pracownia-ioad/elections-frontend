@@ -29,3 +29,14 @@ export type LocalElection = $Diff<
     id: number,
   |}
 >;
+
+export type User = {|
+  index: string,
+  token: string,
+  isAdmin: boolean,
+|};
+
+export type Credentials = {|
+  index: string,
+  password: string,
+|};

@@ -1,12 +1,14 @@
 /* @flow */
 import * as React from 'react';
 import { makeStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import { navigate } from '@reach/router';
 
 import CandidatesSidebar from './CandidatesSidebar';
 import Appbar from './Appbar';
 
 import { getCandidates } from '../services';
-import adminChecker from '../hoc/adminChecker';
 
 type Props = {
   children: React.Node,
@@ -30,6 +32,10 @@ function UserDashboard(props: Props) {
     setCandidates(data || []);
   }
 
+  function navigateToElections() {
+    navigate('/dashboard/user');
+  }
+
   return (
     <div>
       <Appbar logout={props.logout} />
@@ -39,6 +45,16 @@ function UserDashboard(props: Props) {
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>
+      <Button
+        variant="extendedFab"
+        color="primary"
+        aria-label="Navigate to admin panel"
+        className={classes.fab}
+        onClick={navigateToElections}
+      >
+        <NavigationIcon className={classes.extendedIcon} />
+        Panel głosowania
+      </Button>
     </div>
   );
 }
@@ -57,6 +73,12 @@ const useStyles = makeStyles({
   container: {
     flex: 4,
   },
+  fab: {
+    position: 'fixed',
+    right: '0',
+    bottom: '0',
+    margin: '20px',
+  },
 });
 
-export default adminChecker(UserDashboard);
+export default UserDashboard;

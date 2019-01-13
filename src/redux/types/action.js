@@ -1,5 +1,5 @@
 /* @flow */
-import { type Candidate, type Election } from '../../types';
+import { type Candidate, type Election, type User } from '../../types';
 
 /**
  * Candidate creation
@@ -64,6 +64,33 @@ type FailureElectionsFetching = {|
   type: 'FAILURE_ELECTIONS_FETCHING',
 |};
 
+/**
+ * Login
+ */
+type StartLogin = {|
+  type: 'START_LOGIN',
+|};
+type SuccessLogin = {|
+  type: 'SUCCESS_LOGIN',
+  payload: User,
+|};
+type FailureLogin = {|
+  type: 'FAILURE_LOGIN',
+|};
+
+type CredentialsRetrieved = {|
+  type: 'CREDENTIALS_RETRIEVED',
+  payload: User,
+|};
+
+type CredentialsRemoved = {|
+  type: 'CREDENTIALS_REMOVED',
+|};
+
+type FailureCredentialsRetrieve = {|
+  type: 'FAILURE_CREDENTIALS_RETRIEVE',
+|};
+
 export type Action =
   | StartCreatingCandidate
   | SuccessCreatingCandidate
@@ -76,4 +103,10 @@ export type Action =
   | FailureCreatingElection
   | StartElectionsFetching
   | SuccessElectionsFetching
-  | FailureElectionsFetching;
+  | FailureElectionsFetching
+  | StartLogin
+  | SuccessLogin
+  | FailureLogin
+  | CredentialsRetrieved
+  | CredentialsRemoved
+  | FailureCredentialsRetrieve;
