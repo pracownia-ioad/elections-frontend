@@ -1,5 +1,4 @@
 /* @flow */
-import { fullVotings } from '../mocks';
 import { API_URL } from '../constants';
 import {
   type Election,
@@ -9,19 +8,6 @@ import {
   type ServerElection,
   type VoteObject,
 } from '../types';
-
-export function getVoting(votingId: number): Promise<*> {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const voting = fullVotings.find(({ id }) => id === votingId);
-      if (voting) {
-        resolve(voting);
-      } else {
-        reject(new Error(`Couldn't get voting of it = ${votingId}`));
-      }
-    }, 1500);
-  });
-}
 
 export async function getCandidates(): Promise<Array<Candidate>> {
   const res = await fetch(`${API_URL}/candidates`, {

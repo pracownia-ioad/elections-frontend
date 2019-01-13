@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/styles';
-// import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { makeVote } from '../redux/actions';
 import ElectionComponent from './Election';
@@ -19,7 +18,7 @@ type Props = {|
   vote: VoteObject => Promise<*>,
 |};
 
-function votingContainer({ electionID, elections, vote }: Props) {
+function ElectionContainer({ electionID, elections, vote }: Props) {
   const classes = useStyles();
 
   return (
@@ -30,17 +29,6 @@ function votingContainer({ electionID, elections, vote }: Props) {
     </div>
   );
 }
-
-/* <Suspense
-maxDuration={300}
-fallback={
-  <div className={classes.spinner}>
-    <CircularProgress size={25} />
-  </div>
-}
->
-<Voting votingId={electionID} />
-</Suspense> */
 
 const useStyles = makeStyles({
   root: {
@@ -55,12 +43,6 @@ const useStyles = makeStyles({
     minHeight: '500px',
     transition: 'transform 0.5s',
   },
-  // spinner: {
-  //   display: 'flex',
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
 });
 
 const mapStateToProps = ({ elections }: State) => ({
@@ -78,4 +60,4 @@ const mapDispatchToProps = (dispatch: *) =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(votingContainer);
+)(ElectionContainer);
