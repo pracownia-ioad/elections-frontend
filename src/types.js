@@ -40,3 +40,8 @@ export type Credentials = {|
   index: string,
   password: string,
 |};
+
+export type VoteObject = {|
+  electionId: number,
+  candidateId: number,
+|};

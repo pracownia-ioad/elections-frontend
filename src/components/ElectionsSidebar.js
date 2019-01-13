@@ -29,7 +29,7 @@ function SidebarItems(props: Props) {
   const now = Date.now();
 
   function handleClick(route: number) {
-    navigate(`/dashboard/user/voting/${route}`);
+    navigate(`/dashboard/user/election/${route}`);
   }
 
   return [...props.items]
