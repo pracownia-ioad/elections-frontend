@@ -52,7 +52,7 @@ const mapStateToProps = ({ elections }: State) => ({
 const mapDispatchToProps = (dispatch: *) =>
   bindActionCreators(
     {
-      votee: makeVote,
+      vote: makeVote,
     },
     dispatch
   );
