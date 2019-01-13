@@ -7,6 +7,7 @@ import {
   type LocalCandidate,
   type LocalElection,
   type ServerElection,
+  type VoteObject,
 } from '../types';
 
 export function getVoting(votingId: number): Promise<*> {
@@ -72,6 +73,23 @@ export async function getElections(): Promise<Array<ServerElection>> {
     headers: {
       'Content-Type': 'application/json',
     },
+  });
+
+  return response.json();
+}
+
+export async function vote({
+  electionId,
+  candidateId,
+}: VoteObject): Promise<*> {
+  const response = await fetch(`${API_URL}/elections/${electionId}/vote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      candidateId,
+    }),
   });
 
   return response.json();

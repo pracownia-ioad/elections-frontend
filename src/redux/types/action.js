@@ -91,6 +91,22 @@ type FailureCredentialsRetrieve = {|
   type: 'FAILURE_CREDENTIALS_RETRIEVE',
 |};
 
+/**
+ * make vote
+ */
+
+type StartMakingVote = {|
+  type: 'START_MAKING_VOTE',
+|};
+
+type SuccessMakingVote = {|
+  type: 'SUCCESS_MAKING_VOTE',
+|};
+
+type FailureMakingVote = {|
+  type: 'FAILURE_MAKING_VOTE',
+|};
+
 export type Action =
   | StartCreatingCandidate
   | SuccessCreatingCandidate
@@ -109,4 +125,7 @@ export type Action =
   | FailureLogin
   | CredentialsRetrieved
   | CredentialsRemoved
-  | FailureCredentialsRetrieve;
+  | FailureCredentialsRetrieve
+  | StartMakingVote
+  | SuccessMakingVote
+  | FailureMakingVote;

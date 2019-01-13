@@ -94,7 +94,7 @@ class App extends React.Component<Props> {
                 <UserDashboard logout={this.logout} path="/dashboard/user/">
                   <ExploreMessage path="/" />
                   {/* $FlowFixMe */}
-                  <VotingContainer path="voting/:votingId" />
+                  <VotingContainer path="election/:electionID" />
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
                   <AdminPanel path="/" />
