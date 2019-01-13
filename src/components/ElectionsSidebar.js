@@ -13,7 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/styles';
 import { navigate } from '@reach/router';
 
-import { fetchElections } from '../redux/actions';
+import { fetchElections, fetchStatistics } from '../redux/actions';
 import { type State } from '../redux/types/state';
 import { type Election } from '../types';
 
@@ -23,6 +23,7 @@ function sortElections(first: Election, second: Election) {
 
 type Props = {
   items: Array<Election>,
+  fetchStatistics: ({ electionId: number }) => Promise<*>,
 };
 
 function SidebarItems(props: Props) {
@@ -75,7 +76,10 @@ function Sidebar(props) {
           <CircularProgress size={25} />
         </div>
       ) : (
-        <SidebarItems items={props.elections} />
+        <SidebarItems
+          fetchStatistics={props.fetchStatistics}
+          items={props.elections}
+        />
       )}
     </List>
   );
@@ -101,6 +105,7 @@ const mapDispatchToProps = (dispatch: *) =>
   bindActionCreators(
     {
       fetchElections,
+      fetchStatistics,
     },
     dispatch
   );

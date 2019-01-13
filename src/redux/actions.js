@@ -25,6 +25,9 @@ import {
   START_MAKING_VOTE,
   SUCCESS_MAKING_VOTE,
   FAILURE_MAKING_VOTE,
+  START_FETCHING_STATISTICS,
+  SUCCESS_FETCHING_STATISTICS,
+  FAILURE_FETCHING_STATISTICS,
 } from './actionTypes';
 
 import {
@@ -33,6 +36,7 @@ import {
   createElection as createElectionService,
   getElections,
   vote,
+  getStatistics,
 } from '../services';
 import {
   type LocalCandidate,
@@ -144,6 +148,22 @@ export function makeVote(voteInfo: VoteObject) {
       dispatch({ type: SUCCESS_MAKING_VOTE });
     } catch (err) {
       dispatch({ type: FAILURE_MAKING_VOTE });
+    }
+  };
+}
+
+export function fetchStatistics({ electionId }: { electionId: string }) {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: START_FETCHING_STATISTICS });
+      // $FlowFixMe broken typings for async/await
+      const response = await getStatistics({ electionId });
+      dispatch({
+        type: SUCCESS_FETCHING_STATISTICS,
+        payload: { ...response.candidateResults, electionId },
+      });
+    } catch (err) {
+      dispatch({ type: FAILURE_FETCHING_STATISTICS });
     }
   };
 }
