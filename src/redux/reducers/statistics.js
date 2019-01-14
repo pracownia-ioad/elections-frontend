@@ -11,7 +11,7 @@ import { type Statistics } from '../../types';
 
 export type StatisticsState = {|
   statistics: {
-    [key: string]: Statistics,
+    [key: string]: Array<Statistics>,
   },
   loading: boolean,
 |};
@@ -33,12 +33,12 @@ export default function(
       };
     }
     case SUCCESS_FETCHING_STATISTICS: {
-      const { electionId, voteCounts, candidate } = action.payload;
+      const { electionId, statistics } = action.payload;
       return {
         ...state,
         statistics: {
           ...state.statistics,
-          [electionId]: { voteCounts, candidate },
+          [electionId]: statistics,
         },
         loading: false,
       };
