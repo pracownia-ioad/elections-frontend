@@ -11,28 +11,46 @@ import Radio from '@material-ui/core/Radio';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 
-import { getVoting } from '../services';
+import { type Election, type VoteObject } from '../types';
 
-type Props = {
-  votingId: number,
-};
+type Props = {|
+  election: ?Election,
+  vote: VoteObject => Promise<*>,
+|};
 
-const VotingResource = unstable_createResource(votingId => getVoting(votingId));
-
-function voting({ votingId }: Props) {
+function voting({ election, vote }: Props) {
   const classes = useStyles();
-  const [currentIndex, setCurrentIndex] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
 
   function handleCandidateClick(id: number) {
-    setCurrentIndex(id);
+    setCurrentId(id);
   }
 
-  const data = VotingResource.read(parseInt(votingId, 10));
+  function handleSubmitButtonClick() {
+    if (!election || !currentId) {
+      return;
+    }
+
+    const candidate = election.candidates.find(({ id }) => currentId === id);
+
+    if (!candidate) {
+      return;
+    }
+
+    vote({
+      electionId: election.id,
+      candidateId: candidate.id,
+    });
+  }
+
+  if (!election) {
+    return 'Something went wrong';
+  }
 
   return (
     <div className={classes.container}>
       <div className={classes.titleWrapper}>
-        <Typography variant="headline">{data.description}</Typography>
+        <Typography variant="headline">{election.name}</Typography>
       </div>
       <Divider />
       <List
@@ -40,20 +58,25 @@ function voting({ votingId }: Props) {
         component="ul"
         subheader={<ListSubheader component="div">Kandydaci</ListSubheader>}
       >
-        {data.candidates.map(({ firstName, lastName, id }) => (
+        {election.candidates.map(({ firstName, lastName, id }) => (
           <ListItem
             key={id}
             dense
             button
             onClick={handleCandidateClick.bind(null, id)}
           >
-            <Radio checked={currentIndex === id} color="primary" />
+            <Radio checked={currentId === id} color="primary" />
             <ListItemText primary={`${firstName} ${lastName}`} />
           </ListItem>
         ))}
       </List>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" component="button" color="primary">
+        <Button
+          variant="contained"
+          component="button"
+          color="primary"
+          onClick={handleSubmitButtonClick}
+        >
           Zatwierdź głos
         </Button>
       </div>

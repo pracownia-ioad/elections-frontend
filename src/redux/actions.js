@@ -22,6 +22,12 @@ import {
   CREDENTIALS_RETRIEVED,
   CREDENTIALS_REMOVED,
   FAILURE_CREDENTIALS_RETRIEVE,
+  START_MAKING_VOTE,
+  SUCCESS_MAKING_VOTE,
+  FAILURE_MAKING_VOTE,
+  START_FETCHING_STATISTICS,
+  SUCCESS_FETCHING_STATISTICS,
+  FAILURE_FETCHING_STATISTICS,
 } from './actionTypes';
 
 import {
@@ -29,12 +35,15 @@ import {
   createCandidate,
   createElection as createElectionService,
   getElections,
+  vote,
+  getStatistics,
 } from '../services';
 import {
   type LocalCandidate,
   type LocalElection,
   type User,
   type Credentials,
+  type VoteObject,
 } from '../types';
 
 export function fetchCandidates() {
@@ -128,5 +137,33 @@ export function removeCredentials() {
   window.localStorage.removeItem(AUTH_DATA_KEY);
   return {
     type: CREDENTIALS_REMOVED,
+  };
+}
+
+export function makeVote(voteInfo: VoteObject) {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: START_MAKING_VOTE });
+      const response = await vote(voteInfo); //eslint-disable-line
+      dispatch({ type: SUCCESS_MAKING_VOTE });
+    } catch (err) {
+      dispatch({ type: FAILURE_MAKING_VOTE });
+    }
+  };
+}
+
+export function fetchStatistics({ electionId }: { electionId: string }) {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: START_FETCHING_STATISTICS });
+      // $FlowFixMe broken typings for async/await
+      const response = await getStatistics({ electionId });
+      dispatch({
+        type: SUCCESS_FETCHING_STATISTICS,
+        payload: { ...response.candidateResults, electionId },
+      });
+    } catch (err) {
+      dispatch({ type: FAILURE_FETCHING_STATISTICS });
+    }
   };
 }

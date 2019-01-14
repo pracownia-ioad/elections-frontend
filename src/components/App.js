@@ -17,7 +17,7 @@ import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 import 'moment/locale/pl';
 
-import VotingContainer from './VotingContainer';
+import ElectionContainer from './ElectionContainer';
 import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
 import {
@@ -93,8 +93,7 @@ class App extends React.Component<Props> {
                 <Login path="/" authenticate={this.authenticate} />
                 <UserDashboard logout={this.logout} path="/dashboard/user/">
                   <ExploreMessage path="/" />
-                  {/* $FlowFixMe */}
-                  <VotingContainer path="voting/:votingId" />
+                  <ElectionContainer path="election/:electionID" />
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
                   <AdminPanel path="/" />
