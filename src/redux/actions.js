@@ -75,6 +75,7 @@ export function createElection(election: LocalElection) {
     try {
       dispatch({ type: START_CREATING_ELECTION });
       await createElectionService(election);
+      fetchElections()(dispatch);
       dispatch({ type: SUCCESS_CREATING_ELECTION });
     } catch (err) {
       dispatch({ type: FAILURE_CREATING_ELECTION });
@@ -152,15 +153,16 @@ export function makeVote(voteInfo: VoteObject) {
   };
 }
 
-export function fetchStatistics({ electionId }: { electionId: string }) {
+export function fetchStatistics({ electionId }: { electionId: number }) {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_FETCHING_STATISTICS });
       // $FlowFixMe broken typings for async/await
       const response = await getStatistics({ electionId });
+      console.log('!@#', { response });
       dispatch({
         type: SUCCESS_FETCHING_STATISTICS,
-        payload: { ...response.candidateResults, electionId },
+        payload: { statistics: response.candidateResults, electionId },
       });
     } catch (err) {
       dispatch({ type: FAILURE_FETCHING_STATISTICS });

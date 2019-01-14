@@ -20,10 +20,13 @@ import 'moment/locale/pl';
 import ElectionContainer from './ElectionContainer';
 import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
+import ElectionStatistics from './ElectionStatistics';
 import {
   retrieveCredentials,
   removeCredentials,
   login,
+  fetchElections,
+  fetchCandidates,
 } from '../redux/actions';
 
 import { type State } from '../redux/types/state';
@@ -38,6 +41,8 @@ type Props = {
   logout: () => void,
   login: Credentials => Promise<*>,
   user: ?User,
+  fetchElections: () => void,
+  fetchCandidates: () => void,
 };
 
 const theme = createMuiTheme({
@@ -63,12 +68,14 @@ moment.locale('pl');
 class App extends React.Component<Props> {
   componentDidMount() {
     this.props.retrieveCredentials();
+    this.props.fetchElections();
+    this.props.fetchCandidates();
   }
 
   componentDidUpdate(prevProps: Props) {
     if (this.props.user && !prevProps.user) {
       const path = this.props.user.isAdmin ? 'admin' : 'user';
-      navigate(`/dashboard/${path}`);
+      navigate(`/dashboard/${path}/`);
     } else if (!this.props.user && prevProps.user) {
       navigate(`/`);
     }
@@ -92,11 +99,20 @@ class App extends React.Component<Props> {
               <Router>
                 <Login path="/" authenticate={this.authenticate} />
                 <UserDashboard logout={this.logout} path="/dashboard/user/">
-                  <ExploreMessage path="/" />
+                  <ExploreMessage
+                    path="/"
+                    message="Psst, Wybierz głosowanie z panelu po lewej!"
+                  />
                   <ElectionContainer path="election/:electionID" />
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
-                  <AdminPanel path="/" />
+                  <AdminPanel path="/">
+                    <ExploreMessage
+                      path="/"
+                      message="Psst, Wybierz głosowanie z panelu po lewej!"
+                    />
+                    <ElectionStatistics path="statistics/:electionID" />
+                  </AdminPanel>
                 </AdminDashboard>
               </Router>
             </Suspense>
@@ -117,6 +133,8 @@ const mapDispatchToProps = (dispatch: *) =>
       retrieveCredentials,
       logout: removeCredentials,
       login,
+      fetchElections,
+      fetchCandidates,
     },
     dispatch
   );

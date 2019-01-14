@@ -70,7 +70,9 @@ function Sidebar({ candidates, isFetching }) {
           <CircularProgress size={25} />
         </div>
       ) : (
-        <SidebarItems candidates={candidates} search={search.toLowerCase()} />
+        <div className={classes.scrollable}>
+          <SidebarItems candidates={candidates} search={search.toLowerCase()} />
+        </div>
       )}
     </List>
   );
@@ -84,6 +86,10 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     marginTop: 50,
+  },
+  scrollable: {
+    maxHeight: 200,
+    overflowY: 'auto',
   },
 });
 
