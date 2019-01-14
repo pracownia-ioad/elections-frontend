@@ -20,20 +20,26 @@ type Props = {|
 
 function voting({ election, vote }: Props) {
   const classes = useStyles();
-  const [currentIndex, setCurrentIndex] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
 
   function handleCandidateClick(id: number) {
-    setCurrentIndex(id);
+    setCurrentId(id);
   }
 
   function handleSubmitButtonClick() {
-    if (!election || !currentIndex) {
+    if (!election || !currentId) {
+      return;
+    }
+
+    const candidate = election.candidates.find(({ id }) => currentId === id);
+
+    if (!candidate) {
       return;
     }
 
     vote({
       electionId: election.id,
-      candidateId: election.candidates[currentIndex].id,
+      candidateId: candidate.id,
     });
   }
 
@@ -59,7 +65,7 @@ function voting({ election, vote }: Props) {
             button
             onClick={handleCandidateClick.bind(null, id)}
           >
-            <Radio checked={currentIndex === id} color="primary" />
+            <Radio checked={currentId === id} color="primary" />
             <ListItemText primary={`${firstName} ${lastName}`} />
           </ListItem>
         ))}

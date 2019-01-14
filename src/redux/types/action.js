@@ -1,5 +1,10 @@
 /* @flow */
-import { type Candidate, type Election, type User } from '../../types';
+import {
+  type Candidate,
+  type Election,
+  type User,
+  type Statistics,
+} from '../../types';
 
 /**
  * Candidate creation
@@ -107,6 +112,22 @@ type FailureMakingVote = {|
   type: 'FAILURE_MAKING_VOTE',
 |};
 
+/**
+ * Fetch statistics
+ */
+type StartFetchingStatistics = {|
+  type: 'START_FETCHING_STATISTICS',
+|};
+
+type SuccessFetchingStatistics = {|
+  type: 'SUCCESS_FETCHING_STATISTICS',
+  payload: {| ...Statistics, electionId: number |},
+|};
+
+type FailureFetchingStatistics = {|
+  type: 'FAILURE_FETCHING_STATISTICS',
+|};
+
 export type Action =
   | StartCreatingCandidate
   | SuccessCreatingCandidate
@@ -128,4 +149,7 @@ export type Action =
   | FailureCredentialsRetrieve
   | StartMakingVote
   | SuccessMakingVote
-  | FailureMakingVote;
+  | FailureMakingVote
+  | StartFetchingStatistics
+  | SuccessFetchingStatistics
+  | FailureFetchingStatistics;

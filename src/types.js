@@ -45,3 +45,17 @@ export type VoteObject = {|
   electionId: number,
   candidateId: number,
 |};
+
+export type Statistics = {|
+  candidate: {
+    firstName: string,
+    lastName: string,
+  },
+  voteCounts: number,
+|};
+
+export type ServerStatistics = {|
+  candidateResults: {
+    ...Statistics,
+  },
+|};

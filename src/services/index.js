@@ -7,6 +7,7 @@ import {
   type LocalElection,
   type ServerElection,
   type VoteObject,
+  type ServerStatistics,
 } from '../types';
 
 export async function getCandidates(): Promise<Array<Candidate>> {
@@ -76,6 +77,21 @@ export async function vote({
     body: JSON.stringify({
       candidateId,
     }),
+  });
+
+  return response.json();
+}
+
+export async function getStatistics({
+  electionId,
+}: {
+  electionId: string,
+}): Promise<ServerStatistics> {
+  const response = await fetch(`${API_URL}/elections/${electionId}/results`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
   return response.json();
