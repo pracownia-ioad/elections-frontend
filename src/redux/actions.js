@@ -75,6 +75,7 @@ export function createElection(election: LocalElection) {
     try {
       dispatch({ type: START_CREATING_ELECTION });
       await createElectionService(election);
+      fetchElections()(dispatch);
       dispatch({ type: SUCCESS_CREATING_ELECTION });
     } catch (err) {
       dispatch({ type: FAILURE_CREATING_ELECTION });

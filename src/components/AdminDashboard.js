@@ -38,7 +38,6 @@ function UserDashboard(props: Props) {
             <ElectionsList
               elections={props.elections}
               loading={props.electionsLoading}
-              actionType="statistics"
             />
           </div>
           <div className={classes.candidates}>
@@ -87,7 +86,10 @@ const useStyles = makeStyles({
     bottom: '0',
     margin: '20px',
   },
-  elections: {},
+  elections: {
+    maxHeight: 400,
+    overflowY: 'auto',
+  },
   candidates: {},
 });
 

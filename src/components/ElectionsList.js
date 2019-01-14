@@ -16,7 +16,6 @@ function sortElections(first: Election, second: Election) {
 type Props = {
   elections: Array<Election>,
   loading: boolean,
-  actionType: 'election' | 'statistics',
 };
 
 function Elections(props: Props) {
@@ -24,12 +23,14 @@ function Elections(props: Props) {
 
   const now = Date.now();
 
-  function handleClick(electionId: number) {
-    if (props.actionType === 'election') {
-      navigate(`/dashboard/user/election/${electionId}`);
-    } else {
-      navigate(`/dashboard/admin/statistics/${electionId}`);
-    }
+  function handleClick(isCurrent: boolean) {
+    return function handle(electionId: number) {
+      if (isCurrent) {
+        navigate(`/dashboard/user/election/${electionId}`);
+      } else {
+        navigate(`/dashboard/admin/statistics/${electionId}`);
+      }
+    };
   }
 
   return (
@@ -52,7 +53,7 @@ function Elections(props: Props) {
               key={election.id}
               election={election}
               isCurrent={isCurrent}
-              onClick={handleClick}
+              onClick={handleClick(isCurrent)}
             />
           );
         })

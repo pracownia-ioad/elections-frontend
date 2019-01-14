@@ -32,11 +32,12 @@ function UserDashboard(props: Props) {
       <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
-          <ElectionsList
-            elections={props.elections}
-            actionType="election"
-            loading={props.electionsLoading}
-          />
+          <div className={classes.scrollable}>
+            <ElectionsList
+              elections={props.elections}
+              loading={props.electionsLoading}
+            />
+          </div>
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>
@@ -66,6 +67,10 @@ const useStyles = makeStyles({
     flex: 1,
     height: '100%',
     borderRight: '1px solid #ccc',
+  },
+  scrollable: {
+    overflowY: 'auto',
+    maxHeight: '90%',
   },
   container: {
     flex: 4,
