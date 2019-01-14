@@ -1,5 +1,5 @@
 /* @flow */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -11,7 +11,6 @@ import CreateCandidateModal from './CreateCandidateModal';
 import CreateElectionModal from './CreateElectionModal';
 import {
   addCandidate,
-  fetchCandidates,
   createElection as createElectionAction,
 } from '../redux/actions';
 
@@ -22,10 +21,6 @@ function adminPanel(props) {
   const classes = useStyles();
   const [candidateModalVisible, setCandidateModalVisible] = useState(false);
   const [electionModalVisible, setElectionModalVisible] = useState(false);
-
-  useEffect(() => {
-    props.fetchCandidates();
-  }, []);
 
   async function createCandidate(candidate: LocalCandidate) {
     await props.addCandidate(candidate);
@@ -55,33 +50,40 @@ function adminPanel(props) {
 
   return (
     <div className={classes.container}>
-      <Typography variant="title" className={classes.message}>
-        Panel Admina
-      </Typography>
-      <div className={classes.wrapper}>
-        <Button
-          className={classes.createCandidateButton}
-          variant="outlined"
-          color="primary"
-          onClick={showCandidateModal}
-        >
-          Stwórz kandydata
-        </Button>
-        <Button variant="contained" color="primary" onClick={showElectionModal}>
-          Stwórz wybory
-        </Button>
+      <div className={classes.innerContainer}>
+        <Typography variant="title" className={classes.message}>
+          Panel Admina
+        </Typography>
+        <div className={classes.wrapper}>
+          <Button
+            className={classes.createCandidateButton}
+            variant="outlined"
+            color="primary"
+            onClick={showCandidateModal}
+          >
+            Stwórz kandydata
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={showElectionModal}
+          >
+            Stwórz wybory
+          </Button>
+        </div>
+        <CreateCandidateModal
+          visible={candidateModalVisible}
+          onClose={hideCandidateModal}
+          createCandidate={createCandidate}
+        />
+        <CreateElectionModal
+          visible={electionModalVisible}
+          onClose={hideElectionModal}
+          createElection={createElection}
+          candidates={props.candidates}
+        />
       </div>
-      <CreateCandidateModal
-        visible={candidateModalVisible}
-        onClose={hideCandidateModal}
-        createCandidate={createCandidate}
-      />
-      <CreateElectionModal
-        visible={electionModalVisible}
-        onClose={hideElectionModal}
-        createElection={createElection}
-        candidates={props.candidates}
-      />
+      <div className={classes.statisitcsContainer}>{props.children}</div>
     </div>
   );
 }
@@ -93,8 +95,14 @@ const useStyles = makeStyles({
     marginLeft: 40,
     marginBottom: 35,
     display: 'flex',
+    flexDirection: 'column',
+  },
+  innerContainer: {
+    flex: 1,
+    display: 'flex',
     justifyContent: 'space-between',
   },
+  statisitcsContainer: {},
   wrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -115,7 +123,6 @@ const mapDispatchToProps = (dispatch: *) =>
   bindActionCreators(
     {
       addCandidate,
-      fetchCandidates,
       createElectionAction,
     },
     dispatch

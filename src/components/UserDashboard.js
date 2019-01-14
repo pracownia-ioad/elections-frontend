@@ -6,16 +6,18 @@ import Button from '@material-ui/core/Button';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { navigate } from '@reach/router';
 
-import ElectionsSidebar from './ElectionsSidebar';
+import ElectionsList from './ElectionsList';
 import Appbar from './Appbar';
 
 import { type State } from '../redux/types/state';
-import { type User } from '../types';
+import { type User, type Election } from '../types';
 
 type Props = {
   children: React.Node,
   logout: () => mixed,
   user: ?User,
+  elections: Array<Election>,
+  electionsLoading: boolean,
 };
 
 function UserDashboard(props: Props) {
@@ -30,7 +32,11 @@ function UserDashboard(props: Props) {
       <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
-          <ElectionsSidebar />
+          <ElectionsList
+            elections={props.elections}
+            actionType="election"
+            loading={props.electionsLoading}
+          />
         </div>
         <div className={classes.container}>{props.children}</div>
       </div>
@@ -72,8 +78,10 @@ const useStyles = makeStyles({
   },
 });
 
-const mapStateToProps = ({ user }: State) => ({
+const mapStateToProps = ({ user, elections }: State) => ({
   user: user.user,
+  elections: Object.values(elections.elections),
+  electionsLoading: elections.fetchingElections,
 });
 
 export default connect(mapStateToProps)(UserDashboard);

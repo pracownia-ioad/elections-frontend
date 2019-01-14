@@ -55,7 +55,5 @@ export type Statistics = {|
 |};
 
 export type ServerStatistics = {|
-  candidateResults: {
-    ...Statistics,
-  },
+  candidateResults: Array<Statistics>,
 |};

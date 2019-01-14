@@ -121,7 +121,7 @@ type StartFetchingStatistics = {|
 
 type SuccessFetchingStatistics = {|
   type: 'SUCCESS_FETCHING_STATISTICS',
-  payload: {| ...Statistics, electionId: number |},
+  payload: {| statistics: Array<Statistics>, electionId: number |},
 |};
 
 type FailureFetchingStatistics = {|

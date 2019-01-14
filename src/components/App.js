@@ -20,10 +20,13 @@ import 'moment/locale/pl';
 import ElectionContainer from './ElectionContainer';
 import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
+import ElectionStatistics from './ElectionStatistics';
 import {
   retrieveCredentials,
   removeCredentials,
   login,
+  fetchElections,
+  fetchCandidates,
 } from '../redux/actions';
 
 import { type State } from '../redux/types/state';
@@ -38,6 +41,8 @@ type Props = {
   logout: () => void,
   login: Credentials => Promise<*>,
   user: ?User,
+  fetchElections: () => void,
+  fetchCandidates: () => void,
 };
 
 const theme = createMuiTheme({
@@ -63,6 +68,8 @@ moment.locale('pl');
 class App extends React.Component<Props> {
   componentDidMount() {
     this.props.retrieveCredentials();
+    this.props.fetchElections();
+    this.props.fetchCandidates();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -96,7 +103,9 @@ class App extends React.Component<Props> {
                   <ElectionContainer path="election/:electionID" />
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
-                  <AdminPanel path="/" />
+                  <AdminPanel path="/">
+                    <ElectionStatistics path="statistics/:electionID" />
+                  </AdminPanel>
                 </AdminDashboard>
               </Router>
             </Suspense>
@@ -117,6 +126,8 @@ const mapDispatchToProps = (dispatch: *) =>
       retrieveCredentials,
       logout: removeCredentials,
       login,
+      fetchElections,
+      fetchCandidates,
     },
     dispatch
   );
