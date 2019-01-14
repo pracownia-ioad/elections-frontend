@@ -2,20 +2,24 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { VictoryBar, VictoryChart } from 'victory';
 
 import { makeStyles } from '@material-ui/styles';
-import Typography from '@material-ui/core/Typography';
 
+import { Typography } from '@material-ui/core';
 import { fetchStatistics } from '../redux/actions';
 
-import { type Statistics } from '../types';
+import { type Statistics, type Election } from '../types';
 import { type State } from '../redux/types/state';
 
 type Props = {
   electionID: string,
+  elections: { [key: string]: Election },
   statistics: { [key: string]: Array<Statistics> },
   fetchStatistics: ({ electionId: string }) => void,
 };
+
+const colors = ['#252525', '#525252', '#737373', '#969696', '#bdbdbd'];
 
 function ElectionStatistics(props: Props) {
   const classes = useStyles();
@@ -24,15 +28,49 @@ function ElectionStatistics(props: Props) {
     props.fetchStatistics({ electionId: props.electionID });
   }, []);
 
-  const statistic = props.statistics[props.electionID];
+  React.useEffect(
+    () => {
+      props.fetchStatistics({ electionId: props.electionID });
+    },
+    [props.electionID]
+  );
 
-  if (!statistic) {
-    return null;
-  }
+  const statistic = props.statistics[props.electionID];
+  const election = props.elections[props.electionID];
 
   return (
-    <div className={classes.container}>
-      <Typography>{statistic[0].voteCounts}</Typography>
+    <div className={classes.wrapper}>
+      <div className={classes.container}>
+        {!statistic || !election ? null : (
+          <React.Fragment>
+            <Typography variant="headline">{election.name}</Typography>
+            <VictoryChart
+              domainPadding={{ x: 30 }}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 },
+              }}
+            >
+              <VictoryBar
+                width="100%"
+                data={statistic.map(
+                  ({ voteCounts, candidate: { lastName } }, index) => ({
+                    x: `${lastName}`,
+                    y: voteCounts,
+                    index,
+                  })
+                )}
+                style={{
+                  data: {
+                    fill: d =>
+                      colors[(d.index + colors.length) % colors.length],
+                  },
+                }}
+              />
+            </VictoryChart>
+          </React.Fragment>
+        )}
+      </div>
     </div>
   );
 }
@@ -42,11 +80,19 @@ const useStyles = makeStyles({
     flex: 1,
     height: 400,
     display: 'flex',
+    borderRadius: 5,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  wrapper: {
+    backgroundColor: '#efefef',
+    padding: 50,
   },
 });
 
-const mapStateToProps = ({ statistics }: State) => ({
+const mapStateToProps = ({ statistics, elections }: State) => ({
   statistics: statistics.statistics,
+  elections: elections.elections,
 });
 
 const mapDispatchToProps = (dispatch: *) =>

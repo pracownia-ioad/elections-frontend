@@ -102,7 +102,9 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  statisitcsContainer: {},
+  statisitcsContainer: {
+    marginTop: 50,
+  },
   wrapper: {
     display: 'flex',
     justifyContent: 'center',

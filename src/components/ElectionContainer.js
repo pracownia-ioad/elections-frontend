@@ -32,7 +32,8 @@ function ElectionContainer({ electionID, elections, vote }: Props) {
 
 const useStyles = makeStyles({
   root: {
-    margin: 50,
+    marginLeft: 50,
+    marginRight: 50,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

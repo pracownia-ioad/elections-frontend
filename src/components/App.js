@@ -75,7 +75,7 @@ class App extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (this.props.user && !prevProps.user) {
       const path = this.props.user.isAdmin ? 'admin' : 'user';
-      navigate(`/dashboard/${path}`);
+      navigate(`/dashboard/${path}/`);
     } else if (!this.props.user && prevProps.user) {
       navigate(`/`);
     }
@@ -99,11 +99,18 @@ class App extends React.Component<Props> {
               <Router>
                 <Login path="/" authenticate={this.authenticate} />
                 <UserDashboard logout={this.logout} path="/dashboard/user/">
-                  <ExploreMessage path="/" />
+                  <ExploreMessage
+                    path="/"
+                    message="Psst, Wybierz głosowanie z panelu po lewej!"
+                  />
                   <ElectionContainer path="election/:electionID" />
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
                   <AdminPanel path="/">
+                    <ExploreMessage
+                      path="/"
+                      message="Psst, Wybierz głosowanie z panelu po lewej!"
+                    />
                     <ElectionStatistics path="statistics/:electionID" />
                   </AdminPanel>
                 </AdminDashboard>

@@ -82,7 +82,7 @@ const useStyles = makeStyles({
     position: 'relative',
   },
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     right: '0',
     bottom: '0',
     margin: '20px',

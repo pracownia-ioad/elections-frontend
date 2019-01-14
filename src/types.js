@@ -48,7 +48,7 @@ export type VoteObject = {|
 
 export type Statistics = {|
   candidate: {
-    firstName: string,
+    userName: string,
     lastName: string,
   },
   voteCounts: number,
