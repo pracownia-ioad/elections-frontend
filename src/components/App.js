@@ -21,6 +21,8 @@ import ElectionContainer from './ElectionContainer';
 import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
 import ElectionStatistics from './ElectionStatistics';
+import UserPanel from './UserPanel';
+import SuccessMessage from './SuccessMessage';
 import {
   retrieveCredentials,
   removeCredentials,
@@ -99,11 +101,14 @@ class App extends React.Component<Props> {
               <Router>
                 <Login path="/" authenticate={this.authenticate} />
                 <UserDashboard logout={this.logout} path="/dashboard/user/">
-                  <ExploreMessage
-                    path="/"
-                    message="Psst, Wybierz głosowanie z panelu po lewej!"
-                  />
-                  <ElectionContainer path="election/:electionID" />
+                  <UserPanel path="/">
+                    <ExploreMessage
+                      path="/"
+                      message="Psst, Wybierz głosowanie z panelu po lewej!"
+                    />
+                    <ElectionContainer path="election/:electionID" />
+                    <SuccessMessage path="/success" />
+                  </UserPanel>
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">
                   <AdminPanel path="/">

@@ -22,6 +22,10 @@ type FailureCreatingCandidate = {|
   type: 'FAILURE_CREATING_CANDIDATE',
 |};
 
+type ClearCandidateMessage = {|
+  type: 'CLEAR_CANDIDATE_MESSAGE',
+|};
+
 /**
  * Candidates fetching
  */
@@ -51,6 +55,10 @@ type SuccessCreatingElection = {|
 
 type FailureCreatingElection = {|
   type: 'FAILURE_CREATING_ELECTION',
+|};
+
+type ClearElectionsMessage = {|
+  type: 'CLEAR_ELECTIONS_MESSAGE',
 |};
 
 /**
@@ -112,6 +120,10 @@ type FailureMakingVote = {|
   type: 'FAILURE_MAKING_VOTE',
 |};
 
+type ClearVoteMessage = {|
+  type: 'CLEAR_VOTE_MESSAGE',
+|};
+
 /**
  * Fetch statistics
  */
@@ -152,4 +164,7 @@ export type Action =
   | FailureMakingVote
   | StartFetchingStatistics
   | SuccessFetchingStatistics
-  | FailureFetchingStatistics;
+  | FailureFetchingStatistics
+  | ClearElectionsMessage
+  | ClearCandidateMessage
+  | ClearVoteMessage;

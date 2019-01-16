@@ -38,10 +38,18 @@ function ElectionStatistics(props: Props) {
   const statistic = props.statistics[props.electionID];
   const election = props.elections[props.electionID];
 
+  const totalVotes = statistic
+    ? statistic.reduce((prev, curr) => prev + curr.voteCounts, 0)
+    : 0;
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.container}>
-        {!statistic || !election ? null : (
+        {!statistic || !election || totalVotes === 0 ? (
+          <Typography variant="h4" className={classes.message}>
+            Aktualnie nie oddano żadnego głosu na to głosowanie.
+          </Typography>
+        ) : (
           <React.Fragment>
             <Typography variant="headline">{election.name}</Typography>
             <VictoryChart
@@ -82,11 +90,17 @@ const useStyles = makeStyles({
     display: 'flex',
     borderRadius: 5,
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   wrapper: {
     backgroundColor: '#efefef',
     padding: 50,
+  },
+  message: {
+    textAlign: 'center',
+    color: '#555',
+    fontWeight: 'normal',
   },
 });
 
