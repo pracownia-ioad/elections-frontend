@@ -22,6 +22,7 @@ import ExploreMessage from './ExploreMessage';
 import AdminPanel from './AdminPanel';
 import ElectionStatistics from './ElectionStatistics';
 import UserPanel from './UserPanel';
+import SuccessMessage from './SuccessMessage';
 import {
   retrieveCredentials,
   removeCredentials,
@@ -106,6 +107,7 @@ class App extends React.Component<Props> {
                       message="Psst, Wybierz głosowanie z panelu po lewej!"
                     />
                     <ElectionContainer path="election/:electionID" />
+                    <SuccessMessage path="/success" />
                   </UserPanel>
                 </UserDashboard>
                 <AdminDashboard logout={this.logout} path="/dashboard/admin">

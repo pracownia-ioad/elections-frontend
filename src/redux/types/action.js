@@ -120,6 +120,10 @@ type FailureMakingVote = {|
   type: 'FAILURE_MAKING_VOTE',
 |};
 
+type ClearVoteMessage = {|
+  type: 'CLEAR_VOTE_MESSAGE',
+|};
+
 /**
  * Fetch statistics
  */
@@ -162,4 +166,5 @@ export type Action =
   | SuccessFetchingStatistics
   | FailureFetchingStatistics
   | ClearElectionsMessage
-  | ClearCandidateMessage;
+  | ClearCandidateMessage
+  | ClearVoteMessage;

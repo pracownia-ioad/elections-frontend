@@ -30,6 +30,7 @@ import {
   FAILURE_FETCHING_STATISTICS,
   CLEAR_ELECTIONS_MESSAGE,
   CLEAR_CANDIDATE_MESSAGE,
+  CLEAR_VOTE_MESSAGE,
 } from './actionTypes';
 
 import {
@@ -182,5 +183,11 @@ export function clearElectionsMessage(): Action {
 export function clearCandidateMessage(): Action {
   return {
     type: CLEAR_CANDIDATE_MESSAGE,
+  };
+}
+
+export function clearVoteMessage(): Action {
+  return {
+    type: CLEAR_VOTE_MESSAGE,
   };
 }

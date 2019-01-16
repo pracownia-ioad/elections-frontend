@@ -5,9 +5,13 @@ import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { navigate } from '@reach/router';
+import Snackbar from '@material-ui/core/Snackbar';
 
+import { bindActionCreators } from 'redux';
 import ElectionsList from './ElectionsList';
 import Appbar from './Appbar';
+
+import { clearVoteMessage } from '../redux/actions';
 
 import { type State } from '../redux/types/state';
 import { type User, type Election } from '../types';
@@ -18,6 +22,8 @@ type Props = {
   user: ?User,
   elections: Array<Election>,
   electionsLoading: boolean,
+  voteMessage: ?string,
+  clearVoteMessage: () => void,
 };
 
 function UserDashboard(props: Props) {
@@ -53,6 +59,21 @@ function UserDashboard(props: Props) {
           Panel admina
         </Button>
       ) : null}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={!!props.voteMessage}
+        autoHideDuration={5000}
+        onClose={props.clearVoteMessage}
+        ContentProps={{
+          'aria-describedby': 'elections-message-id',
+        }}
+        message={
+          <span id="elections-message-id">{props.voteMessage || ''}</span>
+        }
+      />
     </div>
   );
 }
@@ -83,10 +104,22 @@ const useStyles = makeStyles({
   },
 });
 
-const mapStateToProps = ({ user, elections }: State) => ({
+const mapStateToProps = ({ user, elections, vote }: State) => ({
   user: user.user,
   elections: Object.values(elections.elections),
   electionsLoading: elections.fetchingElections,
+  voteMessage: vote.message,
 });
 
-export default connect(mapStateToProps)(UserDashboard);
+const mapDispatchToProps = (dispatch: *) =>
+  bindActionCreators(
+    {
+      clearVoteMessage,
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserDashboard);

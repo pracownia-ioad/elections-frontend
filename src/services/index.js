@@ -77,7 +77,7 @@ export async function vote({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
+    data: JSON.stringify({
       candidateId,
     }),
   });
