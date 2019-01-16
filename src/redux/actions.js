@@ -28,6 +28,9 @@ import {
   START_FETCHING_STATISTICS,
   SUCCESS_FETCHING_STATISTICS,
   FAILURE_FETCHING_STATISTICS,
+  CLEAR_ELECTIONS_MESSAGE,
+  CLEAR_CANDIDATE_MESSAGE,
+  CLEAR_VOTE_MESSAGE,
 } from './actionTypes';
 
 import {
@@ -45,12 +48,13 @@ import {
   type Credentials,
   type VoteObject,
 } from '../types';
+import { type Action } from './types/action';
 
 export function fetchCandidates() {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_CANDIDATES_FETCHING });
-      const data = await getCandidates();
+      const { data } = await getCandidates();
       dispatch({ type: SUCCESS_CANDIDATES_FETCHING, payload: data });
     } catch (err) {
       dispatch({ type: FAILURE_CANDIDATES_FETCHING });
@@ -62,8 +66,8 @@ export function addCandidate(candidate: LocalCandidate) {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_CREATING_CANDIDATE });
-      const candidateData = await createCandidate(candidate);
-      dispatch({ type: SUCCESS_CREATING_CANDIDATE, payload: candidateData });
+      const { data } = await createCandidate(candidate);
+      dispatch({ type: SUCCESS_CREATING_CANDIDATE, payload: data });
     } catch (err) {
       dispatch({ type: FAILURE_CREATING_CANDIDATE });
     }
@@ -87,9 +91,9 @@ export function fetchElections() {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_ELECTIONS_FETCHING });
-      // $FlowFixMe broken typings for async/await
-      const elections = await getElections();
-      const mappedElections = elections.map(election => {
+      // $FlowFixMe broken typings..
+      const { data } = await getElections();
+      const mappedElections = data.map(election => {
         const { startDate, endDate } = election;
         return {
           ...election,
@@ -145,7 +149,7 @@ export function makeVote(voteInfo: VoteObject) {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_MAKING_VOTE });
-      const response = await vote(voteInfo); //eslint-disable-line
+      await vote(voteInfo);
       dispatch({ type: SUCCESS_MAKING_VOTE });
     } catch (err) {
       dispatch({ type: FAILURE_MAKING_VOTE });
@@ -157,15 +161,33 @@ export function fetchStatistics({ electionId }: { electionId: number }) {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_FETCHING_STATISTICS });
-      // $FlowFixMe broken typings for async/await
-      const response = await getStatistics({ electionId });
-      console.log('!@#', { response });
+      const { data } = await getStatistics({
+        electionId: electionId.toString(),
+      });
       dispatch({
         type: SUCCESS_FETCHING_STATISTICS,
-        payload: { statistics: response.candidateResults, electionId },
+        payload: { statistics: data.candidateResults, electionId },
       });
     } catch (err) {
       dispatch({ type: FAILURE_FETCHING_STATISTICS });
     }
+  };
+}
+
+export function clearElectionsMessage(): Action {
+  return {
+    type: CLEAR_ELECTIONS_MESSAGE,
+  };
+}
+
+export function clearCandidateMessage(): Action {
+  return {
+    type: CLEAR_CANDIDATE_MESSAGE,
+  };
+}
+
+export function clearVoteMessage(): Action {
+  return {
+    type: CLEAR_VOTE_MESSAGE,
   };
 }

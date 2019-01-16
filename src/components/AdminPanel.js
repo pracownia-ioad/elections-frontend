@@ -6,12 +6,15 @@ import { bindActionCreators } from 'redux';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import CreateCandidateModal from './CreateCandidateModal';
 import CreateElectionModal from './CreateElectionModal';
 import {
   addCandidate,
   createElection as createElectionAction,
+  clearElectionsMessage,
+  clearCandidateMessage,
 } from '../redux/actions';
 
 import { type LocalCandidate, type LocalElection } from '../types';
@@ -23,13 +26,13 @@ function adminPanel(props) {
   const [electionModalVisible, setElectionModalVisible] = useState(false);
 
   async function createCandidate(candidate: LocalCandidate) {
-    await props.addCandidate(candidate);
     hideCandidateModal();
+    await props.addCandidate(candidate);
   }
 
   async function createElection(election: LocalElection) {
-    await props.createElectionAction(election);
     hideElectionModal();
+    await props.createElectionAction(election);
   }
 
   function hideCandidateModal() {
@@ -84,6 +87,36 @@ function adminPanel(props) {
         />
       </div>
       <div className={classes.statisitcsContainer}>{props.children}</div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={!!props.electionsMessage}
+        autoHideDuration={5000}
+        onClose={props.clearElectionsMessage}
+        ContentProps={{
+          'aria-describedby': 'elections-message-id',
+        }}
+        message={
+          <span id="elections-message-id">{props.electionsMessage || ''}</span>
+        }
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={!!props.candidateMessage}
+        autoHideDuration={5000}
+        onClose={props.clearCandidateMessage}
+        ContentProps={{
+          'aria-describedby': 'candidate-message-id',
+        }}
+        message={
+          <span id="candidate-message-id">{props.candidateMessage || ''}</span>
+        }
+      />
     </div>
   );
 }
@@ -117,8 +150,10 @@ const useStyles = makeStyles({
   },
 });
 
-const mapStateToProps = ({ candidates }: State) => ({
+const mapStateToProps = ({ candidates, elections }: State) => ({
   candidates: Object.values(candidates.candidates),
+  electionsMessage: elections.message,
+  candidateMessage: candidates.message,
 });
 
 const mapDispatchToProps = (dispatch: *) =>
@@ -126,6 +161,8 @@ const mapDispatchToProps = (dispatch: *) =>
     {
       addCandidate,
       createElectionAction,
+      clearElectionsMessage,
+      clearCandidateMessage,
     },
     dispatch
   );

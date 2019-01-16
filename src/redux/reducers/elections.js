@@ -7,6 +7,7 @@ import {
   START_ELECTIONS_FETCHING,
   SUCCESS_ELECTIONS_FETCHING,
   FAILURE_ELECTIONS_FETCHING,
+  CLEAR_ELECTIONS_MESSAGE,
 } from '../actionTypes';
 
 import { type Action } from '../types/action';
@@ -18,12 +19,14 @@ export type CandidatesState = {|
   },
   creatingElection: boolean,
   fetchingElections: boolean,
+  message: ?string,
 |};
 
 const initialState = {
   elections: {},
   creatingElection: false,
   fetchingElections: false,
+  message: null,
 };
 
 export default function(
@@ -41,12 +44,20 @@ export default function(
       return {
         ...state,
         creatingElection: false,
+        message: 'Sukces, udało się stworzyć głosowanie!',
       };
     }
     case FAILURE_CREATING_ELECTION: {
       return {
         ...state,
         creatingElection: false,
+        message: 'Ops, coś poszło nie tak, spróbuj ponownie.',
+      };
+    }
+    case CLEAR_ELECTIONS_MESSAGE: {
+      return {
+        ...state,
+        message: null,
       };
     }
     case START_ELECTIONS_FETCHING: {

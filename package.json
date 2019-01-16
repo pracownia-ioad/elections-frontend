@@ -8,6 +8,7 @@
     "@material-ui/icons": "^3.0.1",
     "@material-ui/styles": "^3.0.0-alpha.0",
     "@reach/router": "^1.2.1",
+    "axios": "^0.18.0",
     "material-ui-pickers": "^2.1.1",
     "moment": "^2.23.0",
     "react": "16.7.0-alpha.2",

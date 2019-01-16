@@ -7,6 +7,7 @@ import {
   START_CANDIDATES_FETCHING,
   SUCCESS_CANDIDATES_FETCHING,
   FAILURE_CANDIDATES_FETCHING,
+  CLEAR_CANDIDATE_MESSAGE,
 } from '../actionTypes';
 
 import { type Action } from '../types/action';
@@ -18,12 +19,14 @@ export type CandidatesState = {|
   },
   fetchingCandidates: boolean,
   creatingCandidate: boolean,
+  message: ?string,
 |};
 
 const initialState = {
   candidates: {},
   fetchingCandidates: false,
   creatingCandidate: false,
+  message: null,
 };
 
 export default function(
@@ -45,12 +48,20 @@ export default function(
           [action.payload.id]: action.payload,
         },
         creatingCandidate: false,
+        message: 'Sukces, udało się stworzyć kandydata!',
       };
     }
     case FAILURE_CREATING_CANDIDATE: {
       return {
         ...state,
         creatingCandidate: false,
+        message: 'Ops, coś poszło nie tak, spróbuj ponownie.',
+      };
+    }
+    case CLEAR_CANDIDATE_MESSAGE: {
+      return {
+        ...state,
+        message: null,
       };
     }
     case START_CANDIDATES_FETCHING: {
