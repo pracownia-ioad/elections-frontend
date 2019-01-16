@@ -1,4 +1,6 @@
 /* @flow */
+import axios from 'axios';
+
 import { API_URL } from '../constants';
 import {
   type Election,
@@ -10,66 +12,67 @@ import {
   type ServerStatistics,
 } from '../types';
 
-export async function getCandidates(): Promise<Array<Candidate>> {
-  const res = await fetch(`${API_URL}/candidates`, {
+type AxiosPromise<T> = Promise<{
+  data: T,
+  status: number,
+}>;
+
+export function getCandidates(): AxiosPromise<Array<Candidate>> {
+  return axios({
+    url: `${API_URL}/candidates`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  const data = await res.json();
-  return data;
 }
 
-export async function createCandidate(
+export function createCandidate(
   candidate: LocalCandidate
-): Promise<Candidate> {
-  const response = await fetch(`${API_URL}/candidates`, {
+): AxiosPromise<Candidate> {
+  return axios({
+    url: `${API_URL}/candidates`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(candidate),
+    data: JSON.stringify(candidate),
   });
-
-  return response.json();
 }
 
-export async function createElection(
+export function createElection(
   election: LocalElection
-): Promise<Election> {
-  const response = await fetch(`${API_URL}/elections`, {
+): AxiosPromise<Election> {
+  return axios({
+    url: `${API_URL}/elections`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
+    data: JSON.stringify({
       ...election,
       startDate: election.startDate.toISOString(),
       endDate: election.endDate.toISOString(),
     }),
   });
-
-  return response.json();
 }
 
-export async function getElections(): Promise<Array<ServerElection>> {
-  const response = await fetch(`${API_URL}/elections`, {
+export async function getElections(): AxiosPromise<Array<ServerElection>> {
+  return axios({
+    url: `${API_URL}/elections`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  return response.json();
 }
 
 export async function vote({
   electionId,
   candidateId,
-}: VoteObject): Promise<*> {
-  const response = await fetch(`${API_URL}/elections/${electionId}/vote`, {
+}: VoteObject): AxiosPromise<*> {
+  return axios({
+    url: `${API_URL}/elections/${electionId}/vote`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,21 +81,18 @@ export async function vote({
       candidateId,
     }),
   });
-
-  return response.json();
 }
 
 export async function getStatistics({
   electionId,
 }: {
   electionId: string,
-}): Promise<ServerStatistics> {
-  const response = await fetch(`${API_URL}/elections/${electionId}/results`, {
+}): AxiosPromise<ServerStatistics> {
+  return axios({
+    url: `${API_URL}/elections/${electionId}/results`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  return response.json();
 }

@@ -74,7 +74,6 @@ const useStyles = makeStyles({
   },
   container: {
     flex: 4,
-    margin: 50,
   },
   fab: {
     position: 'fixed',
