@@ -10,7 +10,7 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
-import { DatePicker } from 'material-ui-pickers';
+import { DateTimePicker } from 'material-ui-pickers';
 
 import { type LocalElection, type Candidate } from '../types';
 
@@ -68,23 +68,27 @@ function createCandidateModal(props: Props) {
           value={name}
           onChange={onNameChange}
         />
-        <DatePicker
+        <DateTimePicker
           emptyLabel="Data rozpoczęcia"
-          className={classes.input}
+          autoOk
+          ampm={false}
+          disablePast
           value={startDate}
-          format="dddd, MMMM Do YYYY"
           onChange={setStartDate}
-          disablePast
-          maxDate={endDate || undefined}
-        />
-        <DatePicker
-          emptyLabel="Data zakończenia"
-          className={classes.input}
-          value={endDate}
-          format="dddd, MMMM Do YYYY"
-          onChange={setEndDate}
-          disablePast
           minDate={startDate || undefined}
+          className={classes.input}
+          format="dddd, MMMM Do YYYY, h:mm"
+        />
+        <DateTimePicker
+          emptyLabel="Data zakończenia"
+          autoOk
+          ampm={false}
+          disablePast
+          value={endDate}
+          onChange={setEndDate}
+          minDate={startDate || undefined}
+          className={classes.input}
+          format="dddd, MMMM Do YYYY, h:mm"
         />
         <FormControl className={classes.input}>
           <InputLabel htmlFor="select-multiple-chip">Kandydaci</InputLabel>
