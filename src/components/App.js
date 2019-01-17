@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import blue from '@material-ui/core/colors/blue';
+import Snackbar from '@material-ui/core/Snackbar';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { Router, navigate } from '@reach/router';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
@@ -23,12 +24,14 @@ import AdminPanel from './AdminPanel';
 import ElectionStatistics from './ElectionStatistics';
 import UserPanel from './UserPanel';
 import SuccessMessage from './SuccessMessage';
+import Appbar from './Appbar';
 import {
   retrieveCredentials,
   removeCredentials,
   login,
   fetchElections,
   fetchCandidates,
+  clearLoginMessage,
 } from '../redux/actions';
 
 import { type State } from '../redux/types/state';
@@ -45,6 +48,8 @@ type Props = {
   user: ?User,
   fetchElections: () => void,
   fetchCandidates: () => void,
+  loginMessage: ?string,
+  clearLoginMessage: () => void,
 };
 
 const theme = createMuiTheme({
@@ -99,27 +104,46 @@ class App extends React.Component<Props> {
             <CssBaseline />
             <Suspense fallback={<div>Loading...</div>}>
               <Router>
-                <Login path="/" authenticate={this.authenticate} />
-                <UserDashboard logout={this.logout} path="/dashboard/user/">
-                  <UserPanel path="/">
-                    <ExploreMessage
-                      path="/"
-                      message="Psst, Wybierz głosowanie z panelu po lewej!"
-                    />
-                    <ElectionContainer path="election/:electionID" />
-                    <SuccessMessage path="/success" />
-                  </UserPanel>
-                </UserDashboard>
-                <AdminDashboard logout={this.logout} path="/dashboard/admin">
-                  <AdminPanel path="/">
-                    <ExploreMessage
-                      path="/"
-                      message="Psst, Wybierz głosowanie z panelu po lewej!"
-                    />
-                    <ElectionStatistics path="statistics/:electionID" />
-                  </AdminPanel>
-                </AdminDashboard>
+                <Appbar path="/">
+                  <Login path="/" />
+                  <UserDashboard logout={this.logout} path="/dashboard/user/">
+                    <UserPanel path="/">
+                      <ExploreMessage
+                        path="/"
+                        message="Psst, Wybierz głosowanie z panelu po lewej!"
+                      />
+                      <ElectionContainer path="election/:electionID" />
+                      <SuccessMessage path="/success" />
+                    </UserPanel>
+                  </UserDashboard>
+                  <AdminDashboard logout={this.logout} path="/dashboard/admin">
+                    <AdminPanel path="/">
+                      <ExploreMessage
+                        path="/"
+                        message="Psst, Wybierz głosowanie z panelu po lewej!"
+                      />
+                      <ElectionStatistics path="statistics/:electionID" />
+                    </AdminPanel>
+                  </AdminDashboard>
+                </Appbar>
               </Router>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                open={!!this.props.loginMessage}
+                autoHideDuration={5000}
+                onClose={this.props.clearLoginMessage}
+                ContentProps={{
+                  'aria-describedby': 'elections-message-id',
+                }}
+                message={
+                  <span id="elections-message-id">
+                    {this.props.loginMessage || ''}
+                  </span>
+                }
+              />
             </Suspense>
           </MuiPickersUtilsProvider>
         </MuiThemeProvider>
@@ -130,6 +154,7 @@ class App extends React.Component<Props> {
 
 const mapStateToProps = ({ user }: State) => ({
   user: user.user,
+  loginMessage: user.message,
 });
 
 const mapDispatchToProps = (dispatch: *) =>
@@ -140,6 +165,7 @@ const mapDispatchToProps = (dispatch: *) =>
       login,
       fetchElections,
       fetchCandidates,
+      clearLoginMessage,
     },
     dispatch
   );

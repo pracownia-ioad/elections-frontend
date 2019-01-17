@@ -6,6 +6,7 @@ import {
   FAILURE_LOGIN,
   CREDENTIALS_RETRIEVED,
   CREDENTIALS_REMOVED,
+  CLEAR_LOGIN_MESSAGE,
 } from '../actionTypes';
 
 import { type Action } from '../types/action';
@@ -14,11 +15,13 @@ import { type User } from '../../types';
 export type CandidatesState = {|
   user: ?User,
   loading: boolean,
+  message: ?string,
 |};
 
 const initialState = {
   user: null,
   loading: false,
+  message: null,
 };
 
 export default function(
@@ -37,12 +40,20 @@ export default function(
         ...state,
         user: action.payload,
         loading: false,
+        message: 'Sukces, udało Ci się zalogować!',
       };
     }
     case FAILURE_LOGIN: {
       return {
         ...state,
         loading: false,
+        message: 'Ops, coś poszło nie tak, spróbuj ponownie!',
+      };
+    }
+    case CLEAR_LOGIN_MESSAGE: {
+      return {
+        ...state,
+        message: null,
       };
     }
     case CREDENTIALS_RETRIEVED: {

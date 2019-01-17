@@ -8,14 +8,12 @@ import { navigate } from '@reach/router';
 
 import CandidatesSidebar from './CandidatesSidebar';
 import ElectionsList from './ElectionsList';
-import Appbar from './Appbar';
 
 import { type State } from '../redux/types/state';
 import { type Election, type Candidate } from '../types';
 
 type Props = {
   children: React.Node,
-  logout: () => mixed,
   elections: Array<Election>,
   electionsLoading: boolean,
   candidates: Array<Candidate>,
@@ -31,7 +29,6 @@ function UserDashboard(props: Props) {
 
   return (
     <div>
-      <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
           <div className={classes.elections}>

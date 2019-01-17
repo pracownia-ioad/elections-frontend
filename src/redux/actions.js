@@ -31,6 +31,7 @@ import {
   CLEAR_ELECTIONS_MESSAGE,
   CLEAR_CANDIDATE_MESSAGE,
   CLEAR_VOTE_MESSAGE,
+  CLEAR_LOGIN_MESSAGE,
 } from './actionTypes';
 
 import {
@@ -40,6 +41,7 @@ import {
   getElections,
   vote,
   getStatistics,
+  loginUser,
 } from '../services';
 import {
   type LocalCandidate,
@@ -113,12 +115,19 @@ export function login(credentials: Credentials) {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: START_LOGIN });
-      // TODO: actual call to api
-      const data = { index: credentials.index, token: 'xyz', isAdmin: true };
-      window.localStorage.setItem(AUTH_DATA_KEY, JSON.stringify(data));
+      const { data } = await loginUser({
+        username: credentials.index,
+        password: credentials.password,
+      });
+      const mapped = {
+        index: credentials.index,
+        token: data.token,
+        isAdmin: data.role === 'ROLE_ADMIN',
+      };
+      window.localStorage.setItem(AUTH_DATA_KEY, JSON.stringify(mapped));
       dispatch({
         type: SUCCESS_LOGIN,
-        payload: data,
+        payload: mapped,
       });
     } catch (err) {
       dispatch({ type: FAILURE_LOGIN });
@@ -189,5 +198,11 @@ export function clearCandidateMessage(): Action {
 export function clearVoteMessage(): Action {
   return {
     type: CLEAR_VOTE_MESSAGE,
+  };
+}
+
+export function clearLoginMessage(): Action {
+  return {
+    type: CLEAR_LOGIN_MESSAGE,
   };
 }

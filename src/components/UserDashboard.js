@@ -9,7 +9,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import { bindActionCreators } from 'redux';
 import ElectionsList from './ElectionsList';
-import Appbar from './Appbar';
 
 import { clearVoteMessage } from '../redux/actions';
 
@@ -18,7 +17,6 @@ import { type User, type Election } from '../types';
 
 type Props = {
   children: React.Node,
-  logout: () => mixed,
   user: ?User,
   elections: Array<Election>,
   electionsLoading: boolean,
@@ -35,7 +33,6 @@ function UserDashboard(props: Props) {
 
   return (
     <div>
-      <Appbar logout={props.logout} />
       <div className={classes.dashboardWrapper}>
         <div className={classes.sidebar}>
           <div className={classes.scrollable}>

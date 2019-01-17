@@ -96,3 +96,20 @@ export async function getStatistics({
     },
   });
 }
+
+export async function loginUser({
+  username,
+  password,
+}: {
+  username: string,
+  password: string,
+}): AxiosPromise<{ token: string, role: 'ROLE_USER' | 'ROLE_ADMIN' }> {
+  return axios({
+    url: `${API_URL}/auth`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify({ username, password }),
+  });
+}

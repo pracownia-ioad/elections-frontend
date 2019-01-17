@@ -6,9 +6,7 @@ import { Provider } from 'react-redux';
 
 import App from './components/App';
 
-import configureStore from './redux/store';
-
-const store = configureStore();
+import store from './redux/store';
 
 install();
 

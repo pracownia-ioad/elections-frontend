@@ -90,6 +90,9 @@ type SuccessLogin = {|
 type FailureLogin = {|
   type: 'FAILURE_LOGIN',
 |};
+type ClearLoginMessage = {|
+  type: 'CLEAR_LOGIN_MESSAGE',
+|};
 
 type CredentialsRetrieved = {|
   type: 'CREDENTIALS_RETRIEVED',
@@ -167,4 +170,5 @@ export type Action =
   | FailureFetchingStatistics
   | ClearElectionsMessage
   | ClearCandidateMessage
-  | ClearVoteMessage;
+  | ClearVoteMessage
+  | ClearLoginMessage;

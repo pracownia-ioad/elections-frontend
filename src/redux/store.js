@@ -7,6 +7,10 @@ import { type Store } from './types/store';
 
 const enhancer = compose(applyMiddleware(thunk));
 
-export default function configureStore(): Store {
+function configureStore(): Store {
   return createStore(rootReducer, enhancer);
 }
+
+const store = configureStore();
+
+export default store;
