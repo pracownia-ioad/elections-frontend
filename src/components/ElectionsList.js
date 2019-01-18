@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import * as React from 'react';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -63,6 +63,11 @@ function Elections(props: Props) {
 }
 
 const useStyles = makeStyles({
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+  },
   list: {
     marginTop: 10,
   },

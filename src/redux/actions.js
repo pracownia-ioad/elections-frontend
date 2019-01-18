@@ -122,7 +122,7 @@ export function login(credentials: Credentials) {
       const mapped = {
         index: credentials.index,
         token: data.token,
-        isAdmin: data.role === 'ROLE_ADMIN',
+        isAdmin: data.roles.includes('ROLE_ADMIN'),
       };
       window.localStorage.setItem(AUTH_DATA_KEY, JSON.stringify(mapped));
       dispatch({
