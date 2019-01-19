@@ -5,6 +5,7 @@ import {
   START_MAKING_VOTE,
   SUCCESS_MAKING_VOTE,
   FAILURE_MAKING_VOTE,
+  USER_ALREADY_VOTED,
 } from '../actionTypes';
 
 import { type Action } from '../types/action';
@@ -43,6 +44,12 @@ export default function(
       return {
         ...state,
         message: null,
+      };
+    }
+    case USER_ALREADY_VOTED: {
+      return {
+        ...state,
+        message: 'Twój głos został juz oddany!',
       };
     }
     default:

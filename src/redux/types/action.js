@@ -127,6 +127,10 @@ type ClearVoteMessage = {|
   type: 'CLEAR_VOTE_MESSAGE',
 |};
 
+type UserAlreadyVoted = {|
+  type: 'USER_ALREADY_VOTED',
+|};
+
 /**
  * Fetch statistics
  */
@@ -171,4 +175,5 @@ export type Action =
   | ClearElectionsMessage
   | ClearCandidateMessage
   | ClearVoteMessage
-  | ClearLoginMessage;
+  | ClearLoginMessage
+  | UserAlreadyVoted;

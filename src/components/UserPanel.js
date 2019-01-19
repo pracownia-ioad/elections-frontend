@@ -21,7 +21,7 @@ function UserPanel(props: Props) {
 
   return (
     <div>
-      <div className={classes.container}>{props.children}</div>;
+      <div className={classes.container}>{props.children}</div>
       {props.user && props.user.isAdmin ? (
         <Button
           variant="extendedFab"

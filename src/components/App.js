@@ -24,6 +24,7 @@ import AdminPanel from './AdminPanel';
 import ElectionStatistics from './ElectionStatistics';
 import UserPanel from './UserPanel';
 import SuccessMessage from './SuccessMessage';
+import FailureMessage from './FailureMessage';
 import Sidebar from './Sidebar';
 import ElectionsList from './ElectionsList';
 import Appbar from './Appbar';
@@ -122,6 +123,7 @@ class App extends React.Component<Props> {
                         />
                         <ElectionContainer path="election/:electionID" />
                         <SuccessMessage path="/success" />
+                        <FailureMessage path="/failure/:error" />
                       </UserPanel>
                       <AdminPanel user={this.props.user} path="/admin">
                         <ExploreMessage

@@ -84,7 +84,7 @@ export async function getElections(): AxiosPromise<Array<ServerElection>> {
 export async function vote({
   electionId,
   candidateId,
-}: VoteObject): AxiosPromise<*> {
+}: VoteObject): AxiosPromise<null> {
   const { user } = store.getState();
   const token = user.user ? user.user.token : '';
   return axios({
