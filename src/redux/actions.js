@@ -1,8 +1,8 @@
 /* @flow */
+import { navigate } from '@reach/router';
+
 import { AUTH_DATA_KEY } from '../constants';
-
 import { type Dispatch } from './types/store';
-
 import {
   START_CANDIDATES_FETCHING,
   SUCCESS_CANDIDATES_FETCHING,
@@ -32,8 +32,8 @@ import {
   CLEAR_CANDIDATE_MESSAGE,
   CLEAR_VOTE_MESSAGE,
   CLEAR_LOGIN_MESSAGE,
+  USER_ALREADY_VOTED,
 } from './actionTypes';
-
 import {
   getCandidates,
   createCandidate,
@@ -122,7 +122,7 @@ export function login(credentials: Credentials) {
       const mapped = {
         index: credentials.index,
         token: data.token,
-        isAdmin: data.role === 'ROLE_ADMIN',
+        isAdmin: data.roles.includes('ROLE_ADMIN'),
       };
       window.localStorage.setItem(AUTH_DATA_KEY, JSON.stringify(mapped));
       dispatch({
@@ -160,8 +160,15 @@ export function makeVote(voteInfo: VoteObject) {
       dispatch({ type: START_MAKING_VOTE });
       await vote(voteInfo);
       dispatch({ type: SUCCESS_MAKING_VOTE });
+      navigate('/dashboard/user/success');
     } catch (err) {
+      if (err.response.status === 412) {
+        dispatch({ type: USER_ALREADY_VOTED });
+        navigate('/dashboard/user/failure/already-voted');
+        return;
+      }
       dispatch({ type: FAILURE_MAKING_VOTE });
+      navigate('/dashboard/user/failure/error');
     }
   };
 }

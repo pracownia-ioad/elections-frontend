@@ -12,7 +12,7 @@ import {
 import { type Action } from '../types/action';
 import { type User } from '../../types';
 
-export type CandidatesState = {|
+export type UserState = {|
   user: ?User,
   loading: boolean,
   message: ?string,
@@ -25,9 +25,9 @@ const initialState = {
 };
 
 export default function(
-  state: CandidatesState = initialState,
+  state: UserState = initialState,
   action: Action
-): CandidatesState {
+): UserState {
   switch (action.type) {
     case START_LOGIN: {
       return {

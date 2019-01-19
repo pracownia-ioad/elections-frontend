@@ -3,13 +3,19 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 
-function exploreMessage() {
+type Props = {|
+  error: 'error' | 'already-voted',
+|};
+
+function exploreMessage(props: Props) {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
       <Typography variant="h4" className={classes.message}>
-        Dziękujemy za oddanie głosu!
+        {props.error === 'error'
+          ? 'Ops, coś poszło nie tak..'
+          : 'Operacja niemozliwa do wykonania. Twój głos został juz oddany!'}
       </Typography>
     </div>
   );
@@ -27,6 +33,7 @@ const useStyles = makeStyles({
   message: {
     color: '#555',
     fontWeight: 'normal',
+    textAlign: 'center',
   },
 });
 

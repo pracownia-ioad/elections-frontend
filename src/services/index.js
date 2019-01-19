@@ -12,17 +12,22 @@ import {
   type ServerStatistics,
 } from '../types';
 
+import store from '../redux/store';
+
 type AxiosPromise<T> = Promise<{
   data: T,
   status: number,
 }>;
 
 export function getCandidates(): AxiosPromise<Array<Candidate>> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/candidates`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
 }
@@ -30,11 +35,14 @@ export function getCandidates(): AxiosPromise<Array<Candidate>> {
 export function createCandidate(
   candidate: LocalCandidate
 ): AxiosPromise<Candidate> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/candidates`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     data: JSON.stringify(candidate),
   });
@@ -43,11 +51,14 @@ export function createCandidate(
 export function createElection(
   election: LocalElection
 ): AxiosPromise<Election> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/elections`,
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     data: JSON.stringify({
       ...election,
@@ -58,11 +69,14 @@ export function createElection(
 }
 
 export async function getElections(): AxiosPromise<Array<ServerElection>> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/elections`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
 }
@@ -70,12 +84,15 @@ export async function getElections(): AxiosPromise<Array<ServerElection>> {
 export async function vote({
   electionId,
   candidateId,
-}: VoteObject): AxiosPromise<*> {
+}: VoteObject): AxiosPromise<null> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/elections/${electionId}/vote`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     data: JSON.stringify({
       candidateId,
@@ -88,11 +105,14 @@ export async function getStatistics({
 }: {
   electionId: string,
 }): AxiosPromise<ServerStatistics> {
+  const { user } = store.getState();
+  const token = user.user ? user.user.token : '';
   return axios({
     url: `${API_URL}/elections/${electionId}/results`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
 }
@@ -103,7 +123,7 @@ export async function loginUser({
 }: {
   username: string,
   password: string,
-}): AxiosPromise<{ token: string, role: 'ROLE_USER' | 'ROLE_ADMIN' }> {
+}): AxiosPromise<{ token: string, roles: Array<string> }> {
   return axios({
     url: `${API_URL}/auth`,
     method: 'POST',

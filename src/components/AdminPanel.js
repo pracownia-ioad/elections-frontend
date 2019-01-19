@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { navigate } from '@reach/router';
 import { makeStyles } from '@material-ui/styles';
+import NavigationIcon from '@material-ui/icons/Navigation';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -49,6 +51,10 @@ function adminPanel(props) {
 
   function showElectionModal() {
     setElectionModalVisible(true);
+  }
+
+  function navigateToUserPanel() {
+    navigate('/dashboard/user');
   }
 
   return (
@@ -117,6 +123,18 @@ function adminPanel(props) {
           <span id="candidate-message-id">{props.candidateMessage || ''}</span>
         }
       />
+      {props.user && props.user.isAdmin ? (
+        <Button
+          variant="extendedFab"
+          color="primary"
+          aria-label="Navigate to admin panel"
+          className={classes.fab}
+          onClick={navigateToUserPanel}
+        >
+          <NavigationIcon className={classes.extendedIcon} />
+          Panel Użytkownika
+        </Button>
+      ) : null}
     </div>
   );
 }
@@ -147,6 +165,12 @@ const useStyles = makeStyles({
   },
   input: {
     marginRight: 10,
+  },
+  fab: {
+    position: 'fixed',
+    right: '0',
+    bottom: '0',
+    margin: '20px',
   },
 });
 

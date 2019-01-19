@@ -24,6 +24,9 @@ import AdminPanel from './AdminPanel';
 import ElectionStatistics from './ElectionStatistics';
 import UserPanel from './UserPanel';
 import SuccessMessage from './SuccessMessage';
+import FailureMessage from './FailureMessage';
+import Sidebar from './Sidebar';
+import ElectionsList from './ElectionsList';
 import Appbar from './Appbar';
 import {
   retrieveCredentials,
@@ -35,21 +38,20 @@ import {
 } from '../redux/actions';
 
 import { type State } from '../redux/types/state';
-import { type Credentials, type User } from '../types';
+import { type Credentials, type User, type Election } from '../types';
 
 const Login = React.lazy(() => import('./Login'));
 const UserDashboard = React.lazy(() => import('./UserDashboard'));
-const AdminDashboard = React.lazy(() => import('./AdminDashboard'));
 
 type Props = {
   retrieveCredentials: () => void,
   logout: () => void,
   login: Credentials => Promise<*>,
   user: ?User,
-  fetchElections: () => void,
-  fetchCandidates: () => void,
   loginMessage: ?string,
   clearLoginMessage: () => void,
+  elections: Array<Election>,
+  electionsLoading: boolean,
 };
 
 const theme = createMuiTheme({
@@ -75,14 +77,12 @@ moment.locale('pl');
 class App extends React.Component<Props> {
   componentDidMount() {
     this.props.retrieveCredentials();
-    this.props.fetchElections();
-    this.props.fetchCandidates();
   }
 
   componentDidUpdate(prevProps: Props) {
     if (this.props.user && !prevProps.user) {
       const path = this.props.user.isAdmin ? 'admin' : 'user';
-      navigate(`/dashboard/${path}/`);
+      navigate(`/dashboard/${path}`);
     } else if (!this.props.user && prevProps.user) {
       navigate(`/`);
     }
@@ -104,27 +104,37 @@ class App extends React.Component<Props> {
             <CssBaseline />
             <Suspense fallback={<div>Loading...</div>}>
               <Router>
-                <Appbar path="/">
+                <Appbar path="/" logout={this.logout}>
                   <Login path="/" />
-                  <UserDashboard logout={this.logout} path="/dashboard/user/">
-                    <UserPanel path="/">
-                      <ExploreMessage
-                        path="/"
-                        message="Psst, Wybierz głosowanie z panelu po lewej!"
-                      />
-                      <ElectionContainer path="election/:electionID" />
-                      <SuccessMessage path="/success" />
-                    </UserPanel>
+                  <UserDashboard path="/dashboard">
+                    <Sidebar
+                      path="/"
+                      sidebar={
+                        <ElectionsList
+                          elections={this.props.elections}
+                          loading={this.props.electionsLoading}
+                        />
+                      }
+                    >
+                      <UserPanel user={this.props.user} path="/user">
+                        <ExploreMessage
+                          path="/"
+                          message="Psst, Wybierz głosowanie z panelu po lewej!"
+                        />
+                        <ElectionContainer path="/election/:electionID" />
+                        <ElectionStatistics path="/statistics/:electionID" />
+                        <SuccessMessage path="/success" />
+                        {/* $FlowFixMe */}
+                        <FailureMessage path="failure/:error" />
+                      </UserPanel>
+                      <AdminPanel user={this.props.user} path="/admin">
+                        <ExploreMessage
+                          path="/"
+                          message="Psst, Wybierz głosowanie z panelu po lewej!"
+                        />
+                      </AdminPanel>
+                    </Sidebar>
                   </UserDashboard>
-                  <AdminDashboard logout={this.logout} path="/dashboard/admin">
-                    <AdminPanel path="/">
-                      <ExploreMessage
-                        path="/"
-                        message="Psst, Wybierz głosowanie z panelu po lewej!"
-                      />
-                      <ElectionStatistics path="statistics/:electionID" />
-                    </AdminPanel>
-                  </AdminDashboard>
                 </Appbar>
               </Router>
               <Snackbar
@@ -152,9 +162,11 @@ class App extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = ({ user }: State) => ({
+const mapStateToProps = ({ user, elections }: State) => ({
   user: user.user,
   loginMessage: user.message,
+  elections: Object.values(elections.elections),
+  electionsLoading: elections.fetchingElections,
 });
 
 const mapDispatchToProps = (dispatch: *) =>
