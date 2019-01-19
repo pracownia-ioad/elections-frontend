@@ -20,6 +20,16 @@ type Props = {
 
 function Elections(props: Props) {
   const classes = useStyles();
+  const [state, setState] = React.useState({}); // eslint-disable-line
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setState({});
+      return () => {
+        clearInterval(interval);
+      };
+    }, 2000);
+  }, []);
 
   const now = Date.now();
 
