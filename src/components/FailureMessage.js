@@ -3,16 +3,16 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 
-type Props = {
+type Props = {|
   error: 'error' | 'already-voted',
-};
+|};
 
 function exploreMessage(props: Props) {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <Typography variant="h3" className={classes.message}>
+      <Typography variant="h4" className={classes.message}>
         {props.error === 'error'
           ? 'Ops, coś poszło nie tak..'
           : 'Operacja niemozliwa do wykonania. Twój głos został juz oddany!'}

@@ -8,7 +8,7 @@ function exploreMessage() {
 
   return (
     <div className={classes.container}>
-      <Typography variant="h3" className={classes.message}>
+      <Typography variant="h4" className={classes.message}>
         Dziękujemy za oddanie głosu!
       </Typography>
     </div>

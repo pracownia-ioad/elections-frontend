@@ -121,16 +121,17 @@ class App extends React.Component<Props> {
                           path="/"
                           message="Psst, Wybierz głosowanie z panelu po lewej!"
                         />
-                        <ElectionContainer path="election/:electionID" />
+                        <ElectionContainer path="/election/:electionID" />
+                        <ElectionStatistics path="/statistics/:electionID" />
                         <SuccessMessage path="/success" />
-                        <FailureMessage path="/failure/:error" />
+                        {/* $FlowFixMe */}
+                        <FailureMessage path="failure/:error" />
                       </UserPanel>
                       <AdminPanel user={this.props.user} path="/admin">
                         <ExploreMessage
                           path="/"
                           message="Psst, Wybierz głosowanie z panelu po lewej!"
                         />
-                        <ElectionStatistics path="statistics/:electionID" />
                       </AdminPanel>
                     </Sidebar>
                   </UserDashboard>

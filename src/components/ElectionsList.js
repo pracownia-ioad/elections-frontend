@@ -28,7 +28,7 @@ function Elections(props: Props) {
       if (isCurrent) {
         navigate(`/dashboard/user/election/${electionId}`);
       } else {
-        navigate(`/dashboard/admin/statistics/${electionId}`);
+        navigate(`/dashboard/user/statistics/${electionId}`);
       }
     };
   }
