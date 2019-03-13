@@ -28,7 +28,8 @@
     "eject": "react-scripts eject",
     "flow": "flow .",
     "lint": "eslint src",
-    "test": "yarn lint && yarn flow"
+    "test": "yarn lint && yarn flow",
+    "test:e2e": "yarn cypress run -- --spec \"cypress/integration/*.spec.js\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,6 +42,7 @@
   ],
   "devDependencies": {
     "@callstack/eslint-config": "^3.0.2",
+    "cypress": "^3.1.5",
     "eslint": "5.6.0",
     "flow-bin": "^0.89.0",
     "husky": "^1.2.0"
