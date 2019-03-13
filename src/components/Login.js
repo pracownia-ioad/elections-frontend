@@ -71,6 +71,7 @@ function Login(props: Props) {
         />
         <div className={classes.buttonContainer}>
           <Button
+            id="login-button"
             variant="contained"
             color="primary"
             className={classes.submitButton}
